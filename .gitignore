@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# testing
+**/coverage
+
+# prod
+build/
+dist/
+*/dist/
+reports/
+*/reports
+
+npm-debug.log*
+
+# ide
+.vscode/
+.idea/
+
