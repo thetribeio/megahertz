@@ -1,13 +1,14 @@
+import 'reflect-metadata';
+import {container} from 'tsyringe';
 import {advanceTo, clear} from 'jest-date-mock';
 import DateParser from '../../utils/dateParser';
 import RentACar from '../../../src/core/useCases/carRental/rentACar/handler';
 import RentACarCommand from '../../../src/core/useCases/carRental/rentACar/types/command';
 import CarRentalDTO from '../../../src/core/domain/carRental/dto';
-import CarDTO from '../../../src/core/domain/car/dto';
-import CarReadRepositoryInterface from '../../../src/core/domain/car/interfaces/repositories/read';
 import UnitOfWork from '../../../src/driven/repositories/inMemory/common/unitOfWork';
 import InMemoryCarReadRepository from '../../../src/driven/repositories/inMemory/car/read';
 import InMemoryCar from '../../../src/driven/repositories/inMemory/car/car.entity';
+import configureInMemoryRepositories from '../../../src/configuration/injection/containers/repositories/query/inMemory';
 
 const convertToNumericPrice = (price: string): number => {
     const split = price.split("€");
@@ -43,7 +44,7 @@ describe.each([
         },
         availableCar: {
             id: '18cc7fb0-b9fa-48bd-be26-585b070df6a3',
-            model: 'Ford E-Series 4x4 Van',
+            model: 'Gran Torino',
             modelId: '230c974a-746a-47a5-b958-0c54f52c0620',
             dailyPrice: '249€',
             availableUntil: 'next saturday'
@@ -56,14 +57,13 @@ describe.each([
             totalPrice: '1245€'
         }
     }
-])('$customer.name rents a $command.car.model', function (testCase) {
+])('$customer.name rents a $availableCar.model', function (testCase) {
     let uc: RentACar;
-    let expectedCar: CarDTO;
     let expectedCarRental: CarRentalDTO;
     let dateParser: DateParser;
     let command: RentACarCommand;
     let unitOfWork: UnitOfWork;
-    let carReadRepository: CarReadRepositoryInterface;
+    let carReadRepository: InMemoryCarReadRepository;
 
     beforeAll(() => {
         advanceTo(Date.now());
@@ -71,14 +71,13 @@ describe.each([
     });
 
     beforeEach(() => {
-        unitOfWork = new UnitOfWork();
-        unitOfWork.cars[testCase.availableCar.id] = {
+        configureInMemoryRepositories();
+        unitOfWork = container.resolve("UnitOfWork");
+        unitOfWork.cars.push({
             id: testCase.availableCar.id,
             modelId: testCase.availableCar.modelId,
-        } as InMemoryCar;
-        carReadRepository = new InMemoryCarReadRepository({
-            unitOfWork
-        });
+        } as InMemoryCar);
+        carReadRepository = container.resolve("CarReadRepositoryInterface");
         uc = new RentACar({
             carReadRepository,
         });
@@ -86,12 +85,11 @@ describe.each([
             customerId: testCase.customer.id,
             carModelId: testCase.availableCar.modelId,
         }
-        expectedCar = {
-            id: testCase.availableCar.id
-        }
         expectedCarRental = {
             customerId: testCase.customer.id,
-            car: expectedCar,
+            car: {
+                id: testCase.availableCar.id
+            },
             totalPrice: convertToNumericPrice(testCase.expectedCarRental.totalPrice),
             startDate: dateParser.parse(testCase.command.startDate),
         };

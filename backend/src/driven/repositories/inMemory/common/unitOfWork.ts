@@ -1,13 +1,12 @@
+import 'reflect-metadata';
+import {singleton} from 'tsyringe';
 import InMemoryCar from '../car/car.entity';
 
-type CarEntries = {
-    [key: string]: InMemoryCar,
-}
-
+@singleton()
 export default class UnitOfWork {
-    cars: CarEntries;
+    cars: InMemoryCar[];
 
     constructor() {
-        this.cars = {};
+        this.cars = [];
     }
 }
