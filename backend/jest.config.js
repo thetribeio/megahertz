@@ -7,4 +7,5 @@ module.exports = {
     transform: {
         '^.+\\.[jt]sx?$': 'ts-jest',
     },
+    setupFiles: ['jest-date-mock']
 };
