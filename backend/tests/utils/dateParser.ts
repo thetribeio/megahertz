@@ -1,4 +1,5 @@
-import {add} from 'date-fns';
+import {add, sub} from 'date-fns';
+import {singleton} from "tsyringe";
 
 export class Matcher {
     private match: RegExp;
@@ -34,9 +35,27 @@ class MatchersRegistry {
     constructor() {
         this.entries = [
             new Matcher({
+                match: /^yesterday$/,
+                handler: ({match, groups}: { match: RegExpMatchArray, groups: BaseMatchGroups }) => {
+                    return sub(new Date(), {days: 1});
+                }
+            }),
+            new Matcher({
+                match: /^today$/,
+                handler: ({match, groups}: { match: RegExpMatchArray, groups: BaseMatchGroups }) => {
+                    return new Date();
+                }
+            }),
+            new Matcher({
                 match: /^tomorrow$/,
                 handler: ({match, groups}: { match: RegExpMatchArray, groups: BaseMatchGroups }) => {
                     return add(new Date(), {days: 1});
+                }
+            }),
+            new Matcher({
+                match: /^after tomorrow$/,
+                handler: ({match, groups}: { match: RegExpMatchArray, groups: BaseMatchGroups }) => {
+                    return add(new Date(), {days: 2});
                 }
             }),
             new Matcher({
@@ -87,6 +106,7 @@ class MatchersRegistry {
     }
 }
 
+@singleton()
 export default class DateParser {
     private registry: MatchersRegistry;
 

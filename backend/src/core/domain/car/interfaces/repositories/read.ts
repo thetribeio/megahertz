@@ -1,5 +1,9 @@
 import Car from '../../model';
 
 export default interface CarReadRepositoryInterface {
-    getOneAvailableCar({modelId}: { modelId: string }): Promise<Car>;
+    getOneAvailableCar({
+                           modelId,
+                           startDate,
+                           endDate
+                       }: { modelId: string, startDate: Date, endDate: Date }): Promise<Car>;
 }

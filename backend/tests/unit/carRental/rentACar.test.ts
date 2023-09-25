@@ -1,108 +1,176 @@
 import 'reflect-metadata';
+import {v4} from 'uuid';
 import {container} from 'tsyringe';
-import {advanceTo, clear} from 'jest-date-mock';
+import {advanceTo} from 'jest-date-mock';
 import DateParser from '../../utils/dateParser';
 import RentACar from '../../../src/core/useCases/carRental/rentACar/handler';
 import RentACarCommand from '../../../src/core/useCases/carRental/rentACar/types/command';
 import CarRentalDTO from '../../../src/core/domain/carRental/dto';
 import UnitOfWork from '../../../src/driven/repositories/inMemory/common/unitOfWork';
-import InMemoryCarReadRepository from '../../../src/driven/repositories/inMemory/car/read';
-import InMemoryCar from '../../../src/driven/repositories/inMemory/car/car.entity';
-import configureInMemoryRepositories from '../../../src/configuration/injection/containers/repositories/query/inMemory';
-
-const convertToNumericPrice = (price: string): number => {
-    const split = price.split("€");
-
-    return Number(split[0]);
-}
+import useInMemoryRepositories from '../../../src/configuration/injection/containers/repositories/query/inMemory';
+import {convertToNumericPrice} from '../../utils/misc';
+import {populateCar, populateCarModel, populateCarRental} from '../utils/populate';
+import useTestingUtilities from '../../configuration/containers/utils';
+import {populateCarsAndCarRentalsFromTestCase} from '../utils/populateFromTestCase';
+import {CarTestCaseEntry} from '../utils/testCase.types';
+import InMemoryCarRentalReadRepository from '../../../src/driven/repositories/inMemory/carRental/read';
 
 describe.each([
     {
-        customer: {
-            id: 'd004b603-d424-4a84-8e49-4868587659c3',
-            name: 'Frank Castle',
-        },
         availableCar: {
-            id: 'db9bf6a2-b10e-4b48-a946-543643284532',
-            model: 'Ford E-Series 4x4 Van',
-            modelId: '8db13c9d-31af-4c9e-8456-9aafa00a9f76',
-            dailyPrice: '249€',
-            availableUntil: 'next saturday'
+            id: v4(),
+            model: {
+                name: 'Ford E-Series 4x4 Van',
+                id: '8db13c9d-31af-4c9e-8456-9aafa00a9f76',
+                dailyRate: '100€',
+            },
+            rentals: [],
         },
+        cars: [],
         command: {
-            startDate: 'tomorrow',
-            duration: '5 days',
+            customer: {
+                id: v4(),
+                email: 'frank.castle@usmc.com',
+            },
+            startDate: 'today',
+            endDate: 'tomorrow',
         },
-        expectedCarRental: {
-            totalPrice: '1245€'
-        }
+        expected: {
+            totalPrice: '100€'
+        },
     },
     {
-        customer: {
-            id: 'aa7c24d4-dd6a-4607-8946-ec5cd8f52281',
-            name: 'Walt Kowalski',
-        },
         availableCar: {
-            id: '18cc7fb0-b9fa-48bd-be26-585b070df6a3',
-            model: 'Gran Torino',
-            modelId: '230c974a-746a-47a5-b958-0c54f52c0620',
-            dailyPrice: '249€',
-            availableUntil: 'next saturday'
+            id: v4(),
+            model: {
+                name: 'Gran Torino',
+                id: '230c974a-746a-47a5-b958-0c54f52c0620',
+                dailyRate: '900€',
+            },
+            rentals: [],
         },
+        cars: [
+            {
+                id: '4fb2e816-7b10-452b-8a76-d46bf5ce38d8',
+                model: {
+                    id: '230c974a-746a-47a5-b958-0c54f52c0620',
+                },
+                rentals: [
+                    {
+                        startDate: 'tomorrow',
+                        endDate: 'in 5 days',
+                    }
+                ],
+            }
+        ] as Array<CarTestCaseEntry>,
         command: {
+            customer: {
+                id: v4(),
+                email: 'walt.kowalski@yahoo.com',
+            },
             startDate: 'tomorrow',
-            duration: '5 days',
+            endDate: 'in 3 days',
         },
-        expectedCarRental: {
-            totalPrice: '1245€'
-        }
-    }
-])('$customer.name rents a $availableCar.model', function (testCase) {
+        expected: {
+            totalPrice: '1800€'
+        },
+    },
+    {
+        availableCar: {
+            id: v4(),
+            model: {
+                name: 'Aston Martin V8',
+                id: 'd430e7e9-aa14-4c66-a1c9-c898f5b74000',
+                dailyRate: '3000€',
+            },
+            rentals: [
+                {
+                    startDate: 'next friday',
+                    endDate: 'next saturday',
+                },
+                {
+                    startDate: 'yesterday',
+                    endDate: 'today',
+                },
+            ],
+        },
+        cars: [],
+        command: {
+            customer: {
+                id: v4(),
+                email: 'james.bond@mi6.com',
+            },
+            startDate: 'tomorrow',
+            endDate: 'in 3 days',
+        },
+        expected: {
+            totalPrice: '6000€'
+        },
+    },
+])('Scenario: A simple car rental ' +
+    'Given I am logged in as customer $command.customer.email ' +
+    'And the daily price for a $availableCar.model.name is $availableCar.model.dailyRate ' +
+    'When I rent a $availableCar.model.name starting $command.startDate and ending $command.endDate ', function (testCase) {
     let uc: RentACar;
-    let expectedCarRental: CarRentalDTO;
+    let expectedCarRental: Partial<CarRentalDTO>;
     let dateParser: DateParser;
     let command: RentACarCommand;
-    let unitOfWork: UnitOfWork;
-    let carReadRepository: InMemoryCarReadRepository;
+    let carRentalReadRepository: InMemoryCarRentalReadRepository;
 
     beforeAll(() => {
         advanceTo(Date.now());
-        dateParser = new DateParser();
+        useTestingUtilities();
+        dateParser = container.resolve("DateParser");
     });
 
     beforeEach(() => {
-        configureInMemoryRepositories();
-        unitOfWork = container.resolve("UnitOfWork");
-        unitOfWork.cars.push({
-            id: testCase.availableCar.id,
-            modelId: testCase.availableCar.modelId,
-        } as InMemoryCar);
-        carReadRepository = container.resolve("CarReadRepositoryInterface");
+        useInMemoryRepositories();
+        const unitOfWork: UnitOfWork = container.resolve("UnitOfWork");
+        populateCarsAndCarRentalsFromTestCase(testCase.cars);
+        populateCarModel({
+            id: testCase.availableCar.model.id,
+            dailyRate: convertToNumericPrice(testCase.availableCar.model.dailyRate),
+        }, unitOfWork);
+        populateCar({id: testCase.availableCar.id, modelId: testCase.availableCar.model.id}, unitOfWork);
+        for (const rental of testCase.availableCar.rentals) {
+            populateCarRental({
+                id: v4(),
+                customerId: v4(),
+                carId: testCase.availableCar.id,
+                modelId: testCase.availableCar.model.id,
+                startDate: dateParser.parse(rental.startDate),
+                endDate: dateParser.parse(rental.endDate),
+            }, unitOfWork)
+        }
         uc = new RentACar({
-            carReadRepository,
+            carReadRepository: container.resolve("CarReadRepositoryInterface"),
+            carRentalWriteRepository: container.resolve("CarRentalWriteRepositoryInterface"),
         });
         command = {
-            customerId: testCase.customer.id,
-            carModelId: testCase.availableCar.modelId,
-        }
-        expectedCarRental = {
-            customerId: testCase.customer.id,
-            car: {
-                id: testCase.availableCar.id
-            },
-            totalPrice: convertToNumericPrice(testCase.expectedCarRental.totalPrice),
+            customerId: testCase.command.customer.id,
+            carModelId: testCase.availableCar.model.id,
             startDate: dateParser.parse(testCase.command.startDate),
+            endDate: dateParser.parse(testCase.command.endDate),
         };
+        expectedCarRental = {
+            customerId: testCase.command.customer.id,
+            car: {
+                id: testCase.availableCar.id,
+                modelId: testCase.availableCar.model.id,
+            },
+            totalPrice: convertToNumericPrice(testCase.expected.totalPrice),
+            startDate: dateParser.parse(testCase.command.startDate),
+            endDate: dateParser.parse(testCase.command.endDate),
+        };
+        carRentalReadRepository = container.resolve("CarRentalReadRepositoryInterface");
     })
 
-    it('Scenario: A simple car rental\n' +
-        'Given I am logged in as customer $customer.name\n' +
-        'And there is 1 $availableCar.model in the system\n' +
-        'And the daily price for a $availableCar.model is $availableCar.dailyPrice\n' +
-        'And the $availableCar.model is available until $availableCar.availableUntil\n' +
-        'When I rent a $availableCar.model for $command.duration days starting $command.startDate\n' +
-        'Then it should create a new car rental in the system for a total price of $expectedCarRental.totalPrice', async () => {
-        const carRental = await uc.execute(command);
-        expect(carRental).toEqual(expectedCarRental);
-    })
+    it(
+        `Then it should create a new car rental for a total of ${testCase.expected.totalPrice}`, async () => {
+            const carRental = await uc.execute(command);
+            expectedCarRental.id = carRental.id;
+            const retrievedCarRental = await carRentalReadRepository.read(carRental.id);
+            expect(carRental).toEqual(expectedCarRental);
+            expect(retrievedCarRental.toDTO()).toEqual(expectedCarRental);
+        })
 });
