@@ -1,7 +1,7 @@
 export type CarModelTestCaseEntry = {
     name: string | undefined;
     id: string;
-    dailyPrice: string | undefined;
+    dailyRate: string | undefined;
     startDate: string;
     endDate: string;
     customerId: string | undefined;

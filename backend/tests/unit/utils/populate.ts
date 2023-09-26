@@ -8,14 +8,14 @@ import InMemoryCarModel from '../../../src/driven/repositories/inMemory/carModel
  * @param modelId The car model UID.
  * @param unitOfWork The unit of work that will be populated.
  */
-export const populateCar = ({id, modelId}: { id: string, modelId: string }, unitOfWork: UnitOfWork) => {
-    unitOfWork.cars.push({
+export const populateCar = async ({id, modelId}: { id: string, modelId: string }, unitOfWork: UnitOfWork) => {
+    await unitOfWork.saveEntity("cars", {
         id,
         modelId,
     })
 }
 
-export const populateCarModel = (
+export const populateCarModel = async (
     {
         id,
         dailyRate,
@@ -23,7 +23,7 @@ export const populateCarModel = (
         id: string,
         dailyRate: number,
     }, unitOfWork: UnitOfWork) => {
-    unitOfWork.carModels.push({
+    await unitOfWork.saveEntity("carModels", {
         id,
         dailyRate
     } as InMemoryCarModel);
@@ -40,7 +40,7 @@ export const populateCarModel = (
  * @param customerId The customer UID that booked the car.
  * @param unitOfWork The unit of work that will be populated.
  */
-export const populateCarRental = (
+export const populateCarRental = async (
     {
         id,
         carId,
@@ -56,7 +56,7 @@ export const populateCarRental = (
         endDate: Date,
         customerId: string,
     }, unitOfWork: UnitOfWork) => {
-    unitOfWork.carRentals.push({
+    await unitOfWork.saveEntity("carRentals", {
         id,
         carId,
         startDate,

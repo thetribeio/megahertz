@@ -6,14 +6,14 @@ import DateParser from '../../utils/dateParser';
 import RentACar from '../../../src/core/useCases/carRental/rentACar/handler';
 import RentACarCommand from '../../../src/core/useCases/carRental/rentACar/types/command';
 import CarRentalDTO from '../../../src/core/domain/carRental/dto';
-import UnitOfWork from '../../../src/driven/repositories/inMemory/common/unitOfWork';
 import useInMemoryRepositories from '../../../src/configuration/injection/containers/repositories/query/inMemory';
 import {convertToNumericPrice} from '../../utils/misc';
-import {populateCar, populateCarModel, populateCarRental} from '../utils/populate';
 import useTestingUtilities from '../../configuration/containers/utils';
-import {populateCarsAndCarRentalsFromTestCase} from '../utils/populateFromTestCase';
+import {populateAvailableCarFromTestCase, populateCarsAndCarRentalsFromTestCase} from '../utils/populateFromTestCase';
 import {CarTestCaseEntry} from '../utils/testCase.types';
 import InMemoryCarRentalReadRepository from '../../../src/driven/repositories/inMemory/carRental/read';
+import TransactionInterface from "../../../src/core/domain/common/interfaces/transaction";
+import TransactionManagerInterface from "../../../src/core/domain/common/interfaces/transactionManager";
 
 describe.each([
     {
@@ -123,28 +123,18 @@ describe.each([
         dateParser = container.resolve("DateParser");
     });
 
-    beforeEach(() => {
+    beforeEach(async () => {
         useInMemoryRepositories();
-        const unitOfWork: UnitOfWork = container.resolve("UnitOfWork");
-        populateCarsAndCarRentalsFromTestCase(testCase.cars);
-        populateCarModel({
-            id: testCase.availableCar.model.id,
-            dailyRate: convertToNumericPrice(testCase.availableCar.model.dailyRate),
-        }, unitOfWork);
-        populateCar({id: testCase.availableCar.id, modelId: testCase.availableCar.model.id}, unitOfWork);
-        for (const rental of testCase.availableCar.rentals) {
-            populateCarRental({
-                id: v4(),
-                customerId: v4(),
-                carId: testCase.availableCar.id,
-                modelId: testCase.availableCar.model.id,
-                startDate: dateParser.parse(rental.startDate),
-                endDate: dateParser.parse(rental.endDate),
-            }, unitOfWork)
-        }
+        const transactionManager: TransactionManagerInterface = container.resolve("TransactionManagerInterface");
+        const transaction: TransactionInterface = transactionManager.newTransaction();
+        await populateCarsAndCarRentalsFromTestCase(testCase.cars);
+        await populateAvailableCarFromTestCase(testCase.availableCar as CarTestCaseEntry);
+        await transaction.commit();
+        carRentalReadRepository = container.resolve("CarRentalReadRepositoryInterface");
         uc = new RentACar({
             carReadRepository: container.resolve("CarReadRepositoryInterface"),
             carRentalWriteRepository: container.resolve("CarRentalWriteRepositoryInterface"),
+            transactionManager: container.resolve("TransactionManagerInterface"),
         });
         command = {
             customerId: testCase.command.customer.id,
@@ -162,7 +152,6 @@ describe.each([
             startDate: dateParser.parse(testCase.command.startDate),
             endDate: dateParser.parse(testCase.command.endDate),
         };
-        carRentalReadRepository = container.resolve("CarRentalReadRepositoryInterface");
     })
 
     it(
