@@ -44,7 +44,7 @@ export default class UnitOfWork implements UnitOfWorkOriginatorInterface {
         this.carRentals = [];
         this.carModels = [];
         this.replica = {
-            state: state,
+            state,
             cars: [],
             carRentals: [],
             carModels: [],

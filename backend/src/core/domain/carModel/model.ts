@@ -2,6 +2,7 @@ import CarModelDTO from './dto';
 
 export default class CarModel {
     private readonly id: string;
+
     private readonly dailyRate: number;
 
     constructor(
@@ -17,10 +18,17 @@ export default class CarModel {
         this.dailyRate = dailyRate;
     }
 
+    /**
+     * Returns a car model DTO (Data Transfer Object)
+     *
+     * @return {CarModelDTO} The frozen car model DTO.
+     */
     toDTO(): CarModelDTO {
-        return {
+        const carModelDTO = {
             id: this.id,
             dailyRate: this.dailyRate
         }
+
+        return Object.freeze(carModelDTO);
     }
 }

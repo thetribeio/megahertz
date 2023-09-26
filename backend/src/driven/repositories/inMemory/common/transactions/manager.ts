@@ -2,7 +2,7 @@ import {UnitOfWorkOriginatorInterface} from '../unitOfWork';
 import InMemoryTransaction from '../transaction';
 
 export default class InMemoryTransactionManager {
-    private unitOfWork: UnitOfWorkOriginatorInterface;
+    private readonly unitOfWork: UnitOfWorkOriginatorInterface;
 
     constructor(unitOfWork: UnitOfWorkOriginatorInterface) {
         this.unitOfWork = unitOfWork;

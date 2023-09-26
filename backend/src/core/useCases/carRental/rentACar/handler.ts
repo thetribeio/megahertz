@@ -6,9 +6,14 @@ import CarRentalWriteRepositoryInterface from '../../../domain/carRental/interfa
 import CarRental from '../../../domain/carRental/model';
 import TransactionManagerInterface from '../../../domain/common/interfaces/transactionManager';
 
+/**
+ * Use case class to rent a car for a customer.
+ */
 export default class RentACar {
     private readonly carReadRepository: CarReadRepositoryInterface;
+
     private readonly carRentalWriteRepository: CarRentalWriteRepositoryInterface;
+
     private readonly transactionManager: TransactionManagerInterface;
 
     constructor({

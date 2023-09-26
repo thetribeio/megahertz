@@ -12,8 +12,9 @@ import useTestingUtilities from '../../configuration/containers/utils';
 import {populateAvailableCarFromTestCase, populateCarsAndCarRentalsFromTestCase} from '../utils/populateFromTestCase';
 import {CarTestCaseEntry} from '../utils/testCase.types';
 import InMemoryCarRentalReadRepository from '../../../src/driven/repositories/inMemory/carRental/read';
-import TransactionInterface from "../../../src/core/domain/common/interfaces/transaction";
-import TransactionManagerInterface from "../../../src/core/domain/common/interfaces/transactionManager";
+import TransactionInterface from '../../../src/core/domain/common/interfaces/transaction';
+import TransactionManagerInterface from '../../../src/core/domain/common/interfaces/transactionManager';
+import UnavailableCarError from '../../../src/core/domain/car/errors/unavailable';
 
 describe.each([
     {
@@ -163,3 +164,72 @@ describe.each([
             expect(retrievedCarRental.toDTO()).toEqual(expectedCarRental);
         })
 });
+
+describe.each([
+    {
+        availableCar: {
+            id: v4(),
+            model: {
+                name: 'Ford E-Series 4x4 Van',
+                id: '8db13c9d-31af-4c9e-8456-9aafa00a9f76',
+                dailyRate: '100€',
+            },
+            rentals: [
+                {
+                    startDate: 'today',
+                    endDate: 'in 5 days',
+                }
+            ],
+        },
+        cars: [],
+        command: {
+            customer: {
+                id: v4(),
+                email: 'frank.castle@usmc.com',
+            },
+            startDate: 'today',
+            endDate: 'tomorrow',
+        },
+        expected: {},
+    },
+])('Scenario: No available cars ' +
+    'Given I am logged in as customer $command.customer.email ' +
+    'And there is 1 $unavailableCar.model.name in the system ' +
+    'And $unavailableCar.model.name is unavailable ' +
+    'When I rent a $$unavailableCar.model.name starting $command.startDate and ending $command.endDate ', (testCase) => {
+    let uc: RentACar;
+    let dateParser: DateParser;
+    let command: RentACarCommand;
+
+    beforeAll(() => {
+        advanceTo(Date.now());
+        useTestingUtilities();
+        dateParser = container.resolve("DateParser");
+    });
+
+    beforeEach(async () => {
+        useInMemoryRepositories();
+        const transactionManager: TransactionManagerInterface = container.resolve("TransactionManagerInterface");
+        const transaction: TransactionInterface = transactionManager.newTransaction();
+        await populateAvailableCarFromTestCase(testCase.availableCar as CarTestCaseEntry);
+        await transaction.commit();
+        uc = new RentACar({
+            carReadRepository: container.resolve("CarReadRepositoryInterface"),
+            carRentalWriteRepository: container.resolve("CarRentalWriteRepositoryInterface"),
+            transactionManager: container.resolve("TransactionManagerInterface"),
+        });
+        command = {
+            customerId: testCase.command.customer.id,
+            carModelId: testCase.availableCar.model.id,
+            startDate: dateParser.parse(testCase.command.startDate),
+            endDate: dateParser.parse(testCase.command.endDate),
+        };
+    })
+
+    it(
+        `Then it should raise an error 'UnavailableCarError'`, async () => {
+            await expect(uc.execute(command)).rejects.toThrow(
+                UnavailableCarError
+            );
+        })
+})

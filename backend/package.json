@@ -4,7 +4,8 @@
   "description": "Support project for software architecture course",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint src --ext ts,tsx"
   },
   "author": "Harold Cohen <harold.cohen@thetribe.io>",
   "license": "ISC",
@@ -14,7 +15,9 @@
     "@babel/node": "^7.22.19",
     "@babel/plugin-transform-modules-commonjs": "^7.22.15",
     "@babel/preset-env": "^7.22.20",
+    "deep-clone": "^4.0.0",
     "@tsconfig/node20": "^20.1.2",
+    "lodash": "^4.17.21",
     "@types/lodash": "^4.14.198",
     "@types/ramda": "^0.29.4",
     "@types/uuid": "^9.0.4",
@@ -32,10 +35,12 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@thetribe/eslint-config-typescript": "^0.5.1",
     "@types/jest": "^29.5.5",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/parser": "^6.7.3",
     "babel-jest": "^29.7.0",
     "babel-preset-jest": "^29.6.3",
-    "deep-clone": "^4.0.0",
     "jest": "^29.7.0",
     "jest-cli": "^29.7.0",
     "jest-date-mock": "^1.0.8",

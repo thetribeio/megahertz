@@ -8,6 +8,7 @@ import InMemoryCar from './car.entity';
 import InMemoryCarRental from '../carRental/carRental.entity';
 import CarModel from '../../../../core/domain/carModel/model';
 import InMemoryCarModel from '../carModel/carModel.entity';
+import UnavailableCarError from '../../../../core/domain/car/errors/unavailable';
 
 @injectable()
 export default class InMemoryCarReadRepository implements CarReadRepositoryInterface {
@@ -41,7 +42,10 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
             inMemoryCar => !(retrievedCarRentals.find((
                 element) => (element.carId === inMemoryCar.id) && (element.startDate < endDate) && (element.endDate > startDate)
             ))
-        ) as InMemoryCar;
+        );
+        if (retrievedCar === undefined) {
+            throw new UnavailableCarError();
+        }
         const retrievedCarModel = _.find(
           this.unitOfWork.carModels,
           inMemoryCarModel => inMemoryCarModel.id === modelId
