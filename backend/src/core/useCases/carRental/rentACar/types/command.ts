@@ -1,8 +1,8 @@
 type RentACarCommand = {
     customerId: string;
     carModelId: string;
-    startDate: Date;
-    endDate: Date;
+    pickupDateTime: Date;
+    dropOffDateTime: Date;
 }
 
 export default RentACarCommand;

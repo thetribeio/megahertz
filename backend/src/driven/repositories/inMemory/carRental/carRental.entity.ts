@@ -2,8 +2,8 @@ type InMemoryCarRental = {
     id: string;
     carId: string;
     modelId: string;
-    startDate: Date;
-    endDate: Date;
+    pickupDateTime: Date;
+    dropOffDateTime: Date;
     customerId: string;
     totalPrice: number;
 }

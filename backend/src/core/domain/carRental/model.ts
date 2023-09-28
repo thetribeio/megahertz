@@ -11,31 +11,31 @@ export default class CarRental {
 
     private totalPrice: number;
 
-    private readonly startDate: Date;
+    private readonly pickupDateTime: Date;
 
-    private readonly endDate: Date;
+    private readonly dropOffDateTime: Date;
 
     constructor({
                     id,
                     car,
                     customerId,
                     totalPrice,
-                    startDate,
-                    endDate,
+                    pickupDateTime,
+                    dropOffDateTime,
                 }: {
         id: string,
         car: Car,
         customerId: string,
         totalPrice: number,
-        startDate: Date,
-        endDate: Date,
+        pickupDateTime: Date,
+        dropOffDateTime: Date,
     }) {
         this.id = id;
         this.car = car;
         this.customerId = customerId;
         this.totalPrice = totalPrice;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.pickupDateTime = pickupDateTime;
+        this.dropOffDateTime = dropOffDateTime;
     }
 
     /**
@@ -43,8 +43,8 @@ export default class CarRental {
      */
     computeTotalPrice() {
         const duration = intervalToDuration({
-            start: this.startDate,
-            end: this.endDate,
+            start: this.pickupDateTime,
+            end: this.dropOffDateTime,
         });
         this.totalPrice = this.car.computePrice(duration.days as number);
     }
@@ -60,8 +60,8 @@ export default class CarRental {
             customerId: this.customerId,
             car: this.car.toDTO(),
             totalPrice: this.totalPrice,
-            startDate: this.startDate,
-            endDate: this.endDate,
+            pickupDateTime: this.pickupDateTime,
+            dropOffDateTime: this.dropOffDateTime,
         }
 
         return Object.freeze(carRentalDTO);

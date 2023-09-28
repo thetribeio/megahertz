@@ -43,8 +43,8 @@ export default class InMemoryCarRentalReadRepository implements CarRentalReadRep
             }),
             customerId: retrievedCarRental.customerId,
             totalPrice: retrievedCarRental.totalPrice,
-            startDate: retrievedCarRental.startDate,
-            endDate: retrievedCarRental.endDate,
+            pickupDateTime: retrievedCarRental.pickupDateTime,
+            dropOffDateTime: retrievedCarRental.dropOffDateTime,
         });
     }
 

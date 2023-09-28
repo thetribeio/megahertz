@@ -3,7 +3,7 @@ import Car from '../../model';
 export default interface CarReadRepositoryInterface {
     getOneAvailableCar({
                            modelId,
-                           startDate,
-                           endDate
-                       }: { modelId: string, startDate: Date, endDate: Date }): Promise<Car>;
+                           pickupDateTime,
+                           dropOffDateTime
+                       }: { modelId: string, pickupDateTime: Date, dropOffDateTime: Date }): Promise<Car>;
 }

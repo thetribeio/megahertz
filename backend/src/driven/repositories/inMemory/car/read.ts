@@ -28,7 +28,7 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
         })
     }
 
-    async getOneAvailableCar({modelId, startDate, endDate}: { modelId: string, startDate: Date, endDate: Date }): Promise<Car> {
+    async getOneAvailableCar({modelId, pickupDateTime, dropOffDateTime}: { modelId: string, pickupDateTime: Date, dropOffDateTime: Date }): Promise<Car> {
         const retrievedCars: InMemoryCar[] = _.filter(
             this.unitOfWork.cars,
             inMemoryCar => inMemoryCar.modelId === modelId
@@ -40,7 +40,7 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
         const retrievedCar = _.find(
             retrievedCars,
             inMemoryCar => !(retrievedCarRentals.find((
-                element) => (element.carId === inMemoryCar.id) && (element.startDate < endDate) && (element.endDate > startDate)
+                element) => (element.carId === inMemoryCar.id) && (element.pickupDateTime < dropOffDateTime) && (element.dropOffDateTime > pickupDateTime)
             ))
         );
         if (retrievedCar === undefined) {

@@ -34,16 +34,16 @@ export default class RentACar {
         const transaction = this.transactionManager.newTransaction();
         const availableCar = await this.carReadRepository.getOneAvailableCar({
             modelId: command.carModelId,
-            startDate: command.startDate,
-            endDate: command.endDate,
+            pickupDateTime: command.pickupDateTime,
+            dropOffDateTime: command.dropOffDateTime,
         });
         const carRental = new CarRental({
             id: v4(),
             car: availableCar,
             customerId: command.customerId,
             totalPrice: 0,
-            startDate: command.startDate,
-            endDate: command.endDate,
+            pickupDateTime: command.pickupDateTime,
+            dropOffDateTime: command.dropOffDateTime,
         });
         carRental.computeTotalPrice();
         const carRentalDTO = carRental.toDTO();

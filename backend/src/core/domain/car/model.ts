@@ -1,7 +1,11 @@
 import CarDTO from './dto';
 import CarModel from '../carModel/model';
 
+/**
+ * Domain model for Car.
+ */
 export default class Car {
+
     private readonly id: string;
 
     private readonly model: CarModel;

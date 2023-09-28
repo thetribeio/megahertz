@@ -33,8 +33,8 @@ describe.each([
                 id: v4(),
                 email: 'frank.castle@usmc.com',
             },
-            startDate: 'today',
-            endDate: 'tomorrow',
+            pickupDateTime: 'today',
+            dropOffDateTime: 'tomorrow',
         },
         expected: {
             totalPrice: '100€'
@@ -58,8 +58,8 @@ describe.each([
                 },
                 rentals: [
                     {
-                        startDate: 'tomorrow',
-                        endDate: 'in 5 days',
+                        pickupDateTime: 'tomorrow',
+                        dropOffDateTime: 'in 5 days',
                     }
                 ],
             }
@@ -69,8 +69,8 @@ describe.each([
                 id: v4(),
                 email: 'walt.kowalski@yahoo.com',
             },
-            startDate: 'tomorrow',
-            endDate: 'in 3 days',
+            pickupDateTime: 'tomorrow',
+            dropOffDateTime: 'in 3 days',
         },
         expected: {
             totalPrice: '1800€'
@@ -86,12 +86,12 @@ describe.each([
             },
             rentals: [
                 {
-                    startDate: 'next friday',
-                    endDate: 'next saturday',
+                    pickupDateTime: 'in 4 days',
+                    dropOffDateTime: 'in 5 days',
                 },
                 {
-                    startDate: 'yesterday',
-                    endDate: 'today',
+                    pickupDateTime: 'yesterday',
+                    dropOffDateTime: 'today',
                 },
             ],
         },
@@ -101,8 +101,8 @@ describe.each([
                 id: v4(),
                 email: 'james.bond@mi6.com',
             },
-            startDate: 'tomorrow',
-            endDate: 'in 3 days',
+            pickupDateTime: 'tomorrow',
+            dropOffDateTime: 'in 3 days',
         },
         expected: {
             totalPrice: '6000€'
@@ -111,7 +111,7 @@ describe.each([
 ])('Scenario: A simple car rental ' +
     'Given I am logged in as customer $command.customer.email ' +
     'And the daily price for a $availableCar.model.name is $availableCar.model.dailyRate ' +
-    'When I rent a $availableCar.model.name starting $command.startDate and ending $command.endDate ', function (testCase) {
+    'When I rent a $availableCar.model.name starting $command.pickupDateTime and ending $command.dropOffDateTime ', function (testCase) {
     let uc: RentACar;
     let expectedCarRental: Partial<CarRentalDTO>;
     let dateParser: DateParser;
@@ -140,8 +140,8 @@ describe.each([
         command = {
             customerId: testCase.command.customer.id,
             carModelId: testCase.availableCar.model.id,
-            startDate: dateParser.parse(testCase.command.startDate),
-            endDate: dateParser.parse(testCase.command.endDate),
+            pickupDateTime: dateParser.parse(testCase.command.pickupDateTime),
+            dropOffDateTime: dateParser.parse(testCase.command.dropOffDateTime),
         };
         expectedCarRental = {
             customerId: testCase.command.customer.id,
@@ -150,8 +150,8 @@ describe.each([
                 modelId: testCase.availableCar.model.id,
             },
             totalPrice: convertToNumericPrice(testCase.expected.totalPrice),
-            startDate: dateParser.parse(testCase.command.startDate),
-            endDate: dateParser.parse(testCase.command.endDate),
+            pickupDateTime: dateParser.parse(testCase.command.pickupDateTime),
+            dropOffDateTime: dateParser.parse(testCase.command.dropOffDateTime),
         };
     })
 
@@ -176,8 +176,8 @@ describe.each([
             },
             rentals: [
                 {
-                    startDate: 'today',
-                    endDate: 'in 5 days',
+                    pickupDateTime: 'today',
+                    dropOffDateTime: 'in 5 days',
                 }
             ],
         },
@@ -187,8 +187,8 @@ describe.each([
                 id: v4(),
                 email: 'frank.castle@usmc.com',
             },
-            startDate: 'today',
-            endDate: 'tomorrow',
+            pickupDateTime: 'today',
+            dropOffDateTime: 'tomorrow',
         },
         expected: {},
     },
@@ -196,7 +196,7 @@ describe.each([
     'Given I am logged in as customer $command.customer.email ' +
     'And there is 1 $unavailableCar.model.name in the system ' +
     'And $unavailableCar.model.name is unavailable ' +
-    'When I rent a $$unavailableCar.model.name starting $command.startDate and ending $command.endDate ', (testCase) => {
+    'When I rent a $$unavailableCar.model.name starting $command.pickupDateTime and ending $command.dropOffDateTime ', (testCase) => {
     let uc: RentACar;
     let dateParser: DateParser;
     let command: RentACarCommand;
@@ -221,8 +221,8 @@ describe.each([
         command = {
             customerId: testCase.command.customer.id,
             carModelId: testCase.availableCar.model.id,
-            startDate: dateParser.parse(testCase.command.startDate),
-            endDate: dateParser.parse(testCase.command.endDate),
+            pickupDateTime: dateParser.parse(testCase.command.pickupDateTime),
+            dropOffDateTime: dateParser.parse(testCase.command.dropOffDateTime),
         };
     })
 

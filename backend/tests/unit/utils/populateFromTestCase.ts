@@ -5,8 +5,14 @@ import UnitOfWork from '../../../src/driven/repositories/inMemory/common/unitOfW
 import DateParser from '../../utils/dateParser';
 import {populateCar, populateCarModel, populateCarRental} from './populate';
 import {CarTestCaseEntry} from './testCase.types';
-import {convertToNumericPrice} from "../../utils/misc";
+import {convertToNumericPrice} from '../../utils/misc';
 
+/**
+ * Populates the system with an available car and its rentals,
+ * based on a given dataset.
+ *
+ * @param testCase The testcase containing the car to populate.
+ */
 export const populateAvailableCarFromTestCase = async (testCase: CarTestCaseEntry) => {
     const unitOfWork: UnitOfWork = container.resolve("UnitOfWork");
     const dateParser: DateParser = container.resolve("DateParser");
@@ -24,8 +30,8 @@ export const populateAvailableCarFromTestCase = async (testCase: CarTestCaseEntr
             customerId: v4(),
             carId: testCase.id,
             modelId: testCase.model.id,
-            startDate: dateParser.parse(rental.startDate),
-            endDate: dateParser.parse(rental.endDate),
+            pickupDateTime: dateParser.parse(rental.pickupDateTime),
+            dropOffDateTime: dateParser.parse(rental.dropOffDateTime),
         }, unitOfWork)
     }
 }
@@ -47,9 +53,9 @@ export const populateCarsAndCarRentalsFromTestCase = async (testCase: CarTestCas
             await populateCarRental({
                 id: v4(),
                 carId: car.id,
-                endDate: dateParser.parse(carRental.endDate),
+                dropOffDateTime: dateParser.parse(carRental.dropOffDateTime),
                 modelId: car.model.id,
-                startDate: dateParser.parse(carRental.startDate),
+                pickupDateTime: dateParser.parse(carRental.pickupDateTime),
                 customerId: carRental.customerId !== undefined ? carRental.customerId : v4(),
             }, unitOfWork);
         }

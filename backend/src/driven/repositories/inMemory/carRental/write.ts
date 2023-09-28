@@ -16,8 +16,8 @@ export default class InMemoryCarRentalWriteRepository implements CarRentalWriteR
             id: carRentalDTO.id,
             carId: carRentalDTO.car.id,
             modelId: carRentalDTO.car.modelId,
-            endDate: carRentalDTO.endDate,
-            startDate: carRentalDTO.startDate,
+            dropOffDateTime: carRentalDTO.dropOffDateTime,
+            pickupDateTime: carRentalDTO.pickupDateTime,
             customerId: carRentalDTO.customerId,
             totalPrice: carRentalDTO.totalPrice,
         })

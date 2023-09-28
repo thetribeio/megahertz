@@ -5,8 +5,8 @@ type CarRentalDTO = {
     customerId: string;
     car: CarDTO;
     totalPrice: number;
-    startDate: Date;
-    endDate: Date;
+    pickupDateTime: Date;
+    dropOffDateTime: Date;
 }
 
 export default CarRentalDTO;
