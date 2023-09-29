@@ -5,7 +5,12 @@ module.exports = {
     preset: 'ts-jest',
     testEnvironment: 'node',
     transform: {
-        '^.+\\.[jt]sx?$': 'ts-jest',
+        '^.+\\.[jt]sx?$': [
+            'ts-jest',
+            // {
+            //     isolatedModules: true,
+            // },
+        ],
     },
     setupFiles: ['jest-date-mock']
 };

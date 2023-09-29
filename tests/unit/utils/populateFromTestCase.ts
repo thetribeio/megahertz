@@ -32,6 +32,7 @@ export const populateAvailableCarFromTestCase = async (testCase: CarTestCaseEntr
             modelId: testCase.model.id,
             pickupDateTime: dateParser.parse(rental.pickupDateTime),
             dropOffDateTime: dateParser.parse(rental.dropOffDateTime),
+            totalPrice: 0,
         }, unitOfWork)
     }
 }
@@ -57,6 +58,7 @@ export const populateCarsAndCarRentalsFromTestCase = async (testCase: CarTestCas
                 modelId: car.model.id,
                 pickupDateTime: dateParser.parse(carRental.pickupDateTime),
                 customerId: carRental.customerId !== undefined ? carRental.customerId : v4(),
+                totalPrice: 0,
             }, unitOfWork);
         }
     }

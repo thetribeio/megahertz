@@ -4,7 +4,20 @@ on:
     branches:
       - '*'
 jobs:
-  test-backend:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: yarn install
+      - run: yarn lint
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
