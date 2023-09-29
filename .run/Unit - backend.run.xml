@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Unit - backend" type="JavaScriptTestRunnerJest">
+  <configuration default="false" name="Unit" type="JavaScriptTestRunnerJest">
     <node-interpreter value="$USER_HOME$/.nvm/versions/node/v20.2.0/bin/node" />
     <node-options value="" />
-    <jest-package value="$PROJECT_DIR$/backend/node_modules/jest" />
-    <working-dir value="$PROJECT_DIR$/backend" />
+    <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+    <working-dir value="$PROJECT_DIR$" />
     <jest-options value="unit" />
     <envs />
     <scope-kind value="ALL" />
