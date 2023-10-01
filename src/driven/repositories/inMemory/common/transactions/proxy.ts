@@ -7,6 +7,7 @@ import TransactionInterface from '../../../../../core/domain/common/interfaces/t
 @singleton()
 export default class InMemoryTransactionManagerProxy implements TransactionManagerInterface {
     private transactionManager: InMemoryTransactionManager;
+
     private transaction: TransactionInterface | null;
 
     constructor(@inject("UnitOfWork") unitOfWork: UnitOfWorkOriginatorInterface) {
@@ -23,6 +24,6 @@ export default class InMemoryTransactionManagerProxy implements TransactionManag
     }
 
     async commit(): Promise<void> {
-        this.transaction?.commit();
+        await this.transaction?.commit();
     }
 }
