@@ -46,6 +46,7 @@ export const populateCarModel = async (
  * @param dropOffDateTime The date when the rental ends.
  * @param customerId The customer UID that booked the car.
  * @param unitOfWork The unit of work that will be populated.
+ * @param totalPrice The total price for the car rental.
  */
 export const populateCarRental = async (
     {
@@ -55,6 +56,7 @@ export const populateCarRental = async (
         pickupDateTime,
         dropOffDateTime,
         customerId,
+        totalPrice,
     }: {
         id: string,
         carId: string,
@@ -62,6 +64,7 @@ export const populateCarRental = async (
         pickupDateTime: Date,
         dropOffDateTime: Date,
         customerId: string,
+        totalPrice: number,
     }, unitOfWork: UnitOfWork) => {
     await unitOfWork.saveEntity("carRentals", {
         id,
@@ -69,7 +72,7 @@ export const populateCarRental = async (
         pickupDateTime,
         modelId,
         customerId,
-        totalPrice: 0,
+        totalPrice,
         dropOffDateTime,
     })
 }
