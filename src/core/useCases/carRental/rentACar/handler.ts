@@ -31,7 +31,7 @@ export default class RentACar {
     }
 
     async execute(command: RentACarCommand): Promise<CarRentalDTO> {
-        const transaction = this.transactionManager.newTransaction();
+        this.transactionManager.startTransaction();
         const availableCar = await this.carReadRepository.getOneAvailableCar({
             modelId: command.carModelId,
             pickupDateTime: command.pickupDateTime,
@@ -48,7 +48,7 @@ export default class RentACar {
         carRental.computeTotalPrice();
         const carRentalDTO = carRental.toDTO();
         await this.carRentalWriteRepository.create(carRentalDTO);
-        await transaction.commit();
+        await this.transactionManager.commit();
 
         return carRentalDTO;
     }
