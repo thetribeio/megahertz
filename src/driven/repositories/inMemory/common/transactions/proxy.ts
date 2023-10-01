@@ -8,11 +8,22 @@ import TransactionInterface from '../../../../../core/domain/common/interfaces/t
 export default class InMemoryTransactionManagerProxy implements TransactionManagerInterface {
     private transactionManager: InMemoryTransactionManager;
 
+    private transaction: TransactionInterface | null;
+
     constructor(@inject("UnitOfWork") unitOfWork: UnitOfWorkOriginatorInterface) {
         this.transactionManager = new InMemoryTransactionManager(unitOfWork);
+        this.transaction = null;
+    }
+
+    startTransaction(): void {
+        this.transaction = this.transactionManager.newTransaction();
     }
 
     newTransaction(): TransactionInterface {
         return this.transactionManager.newTransaction();
+    }
+
+    async commit(): Promise<void> {
+        await this.transaction?.commit();
     }
 }
