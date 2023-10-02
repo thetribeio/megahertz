@@ -1,6 +1,8 @@
 import express from 'express';
 import http from 'http';
+import 'dotenv/config';
 
-export const startServer = (app: express.Express): http.Server => app.listen(3030, () => {
-    console.info(`Server listening on port ${3030}`);
-});
+export const startServer = (app: express.Express): http.Server => {
+    const port = Number(process.env.EXPRESS_SERVER_PORT);
+    return app.listen(port, () => {})
+};
