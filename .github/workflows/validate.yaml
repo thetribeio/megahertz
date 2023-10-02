@@ -25,12 +25,12 @@ jobs:
     services:
       postgres:
         image: postgres:13.12
-          env:
-            POSTGRES_USER: user
-            POSTGRES_PASSWORD: password
-            POSTGRES_DB: megahertz
-          ports:
-            - 5432:5432
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: megahertz
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
