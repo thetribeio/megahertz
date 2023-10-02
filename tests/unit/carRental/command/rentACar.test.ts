@@ -6,7 +6,7 @@ import DateParser from '../../../utils/dateParser';
 import RentACar from '../../../../src/core/useCases/carRental/rentACar/handler';
 import RentACarCommand from '../../../../src/core/useCases/carRental/rentACar/types/command';
 import CarRentalDTO from '../../../../src/core/domain/carRental/dto';
-import useInMemoryRepositories from '../../../../src/configuration/injection/containers/repositories/query/inMemory';
+import useInMemoryRepositories from '../../../../src/configuration/injection/containers/repositories/inMemory';
 import {convertToNumericPrice} from '../../../utils/misc';
 import useTestingUtilities from '../../../configuration/containers/utils';
 import {populateAvailableCarFromTestCase, populateCarsAndCarRentalsFromTestCase} from '../../utils/populateFromTestCase';
@@ -147,7 +147,10 @@ describe.each([
             customerId: testCase.command.customer.id,
             car: {
                 id: testCase.availableCar.id,
-                modelId: testCase.availableCar.model.id,
+                model: {
+                    id: testCase.availableCar.model.id,
+                    dailyRate: convertToNumericPrice(testCase.availableCar.model.dailyRate)
+                }
             },
             totalPrice: convertToNumericPrice(testCase.expected.totalPrice),
             pickupDateTime: dateParser.parse(testCase.command.pickupDateTime),

@@ -4,7 +4,7 @@ import {advanceTo} from 'jest-date-mock';
 import useTestingUtilities from '../../../configuration/containers/utils';
 import RetrieveACarRental from '../../../../src/core/useCases/carRental/retrieveACarRental/handler';
 import DateParser from '../../../utils/dateParser';
-import useInMemoryRepositories from '../../../../src/configuration/injection/containers/repositories/query/inMemory';
+import useInMemoryRepositories from '../../../../src/configuration/injection/containers/repositories/inMemory';
 import TransactionManagerInterface from '../../../../src/core/domain/common/interfaces/transactionManager';
 import TransactionInterface from '../../../../src/core/domain/common/interfaces/transaction';
 import CarRentalDTO from '../../../../src/core/domain/carRental/dto';
@@ -40,7 +40,6 @@ describe.each([
         carRental: {
             id: '9cdf0321-1073-4c8c-99c6-a19ffaa987d4',
             customerId: '5b2287bb-b2e3-4378-a5d9-9285eb009506',
-            // customerId: '170f4869-7270-4f15-b931-2bfd8d5e6bb3',
             pickupDateTime: 'today',
             dropOffDateTime: 'tomorrow',
             car: {
@@ -106,10 +105,13 @@ describe.each([
             customerId: testCase.carRental.customerId,
             pickupDateTime: dateParser.parse(testCase.carRental.pickupDateTime),
             dropOffDateTime: dateParser.parse(testCase.carRental.dropOffDateTime),
-            totalPrice: totalPrice,
+            totalPrice,
             car: {
                 id: testCase.carRental.car.id,
-                modelId: testCase.carRental.car.model.id,
+                model: {
+                    id: testCase.carRental.car.model.id,
+                    dailyRate: 0,
+                }
             }
         }
     })

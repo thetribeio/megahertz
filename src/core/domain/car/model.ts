@@ -43,7 +43,7 @@ export default class Car {
     toDTO(): CarDTO {
         const carDTO = {
             id: this.id,
-            modelId: this.model.toDTO().id,
+            model: this.model.toDTO(),
         };
 
         return Object.freeze(carDTO);
