@@ -4,7 +4,7 @@
   "description": "Support project for software architecture course",
   "main": "index.js",
   "scripts": {
-    "test": "DOTENV_CONFIG_PATH= jest",
+    "test": "jest",
     "lint": "eslint src --ext ts,tsx",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
