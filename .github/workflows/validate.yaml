@@ -22,7 +22,7 @@ jobs:
     services:
       image: postgres:13.12
       ports:
-        - "5432:5432"
+        - 5432:5432
       env:
         POSTGRES_USER: user
         POSTGRES_PASSWORD: password
