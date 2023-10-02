@@ -18,6 +18,12 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
         this.unitOfWork = unitOfWork;
     }
 
+    /**
+     * Maps an in memory car to an instance of domain model Car.
+     *
+     * @param inMemoryCar The in memory car to use for mapping.
+     * @param inMemoryCarModel The in memory car model to use for mapping.
+     */
     static toCar({inMemoryCar, inMemoryCarModel}:{inMemoryCar: InMemoryCar, inMemoryCarModel: InMemoryCarModel}): Car {
         return new Car({
             id: inMemoryCar.id,
@@ -29,6 +35,8 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
     }
 
     async getOneAvailableCar({modelId, pickupDateTime, dropOffDateTime}: { modelId: string, pickupDateTime: Date, dropOffDateTime: Date }): Promise<Car> {
+        // The code below needs be refactored using composition
+        // See ticket https://github.com/thetribeio/megahertz/issues/14
         const retrievedCars: InMemoryCar[] = _.filter(
             this.unitOfWork.cars,
             inMemoryCar => inMemoryCar.modelId === modelId

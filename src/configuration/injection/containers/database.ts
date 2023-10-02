@@ -3,9 +3,11 @@ import {DataSource} from 'typeorm';
 import 'dotenv/config';
 
 /**
- * Configures tsyringe to instantiate a TypeORM DataSource.
+ * Configures tsyringe to instantiate a TypeORM DataSource using an env setting file.*
  */
 const useAppDataSource = (): void => {
+    // Most of the variables are currently not typed or parsed correctly
+    // See ticket https://github.com/thetribeio/megahertz/issues/15
     const appDataSource = new DataSource({
         type: "postgres",
         host: process.env.TYPEORM_DATABASE_HOST as string,

@@ -6,6 +6,9 @@ import CarRentalPresenter from "../../../../presenters/carRental/base";
 
 const router = Router();
 
+/**
+ * REST entry point to retrieve a car rental.
+ */
 router.get('/:id', [], async (req: Request, res: Response) => {
     const uc: RetrieveACarRental = new RetrieveACarRental({
         carRentalReadRepository: container.resolve("CarRentalReadRepositoryInterface"),

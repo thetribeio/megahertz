@@ -1,7 +1,16 @@
 import CarRentalView from '../../views/carRental/base';
 import CarRentalDTO from '../../../core/domain/carRental/dto';
 
+/**
+ * Base presenter for car rental views.
+ */
 export default class CarRentalPresenter {
+
+    /**
+     * Maps a car rental DTO to a car rental view.
+     *
+     * @param carRentalDTO The car rental DTO to use for mapping.
+     */
     present({carRentalDTO}: { carRentalDTO: CarRentalDTO }): CarRentalView {
         return {
             id: carRentalDTO.id,

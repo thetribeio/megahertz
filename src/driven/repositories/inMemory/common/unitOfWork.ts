@@ -6,6 +6,11 @@ import InMemoryCarModel from '../carModel/carModel.entity';
 import UnitOfWorkMemento from './memento';
 import deepClone from 'deep-clone';
 
+/**
+ * Type required by the originator UnitOfWork.
+ *
+ * A replica stores pending changes of state.
+ */
 export type UnitOfWorkReplica = {
     state: number;
 
@@ -16,16 +21,44 @@ export type UnitOfWorkReplica = {
     carModels: InMemoryCarModel[];
 }
 
+/**
+ * Interface for the originator required by InMemoryTransaction.
+ */
 export interface UnitOfWorkOriginatorInterface {
+    /**
+     * Saves a change of state using the originator replica.
+     */
     save(): Promise<UnitOfWorkMemento>;
 
+    /**
+     * Saves an entity, without committing.
+     * No change of state is applied until UnitOfWorkOriginatorInterface.save() is called.
+     *
+     * @param name The entity's name plural (Eg: cars)
+     * @param entity The entity to save.
+     */
     saveEntity(name: string, entity: any): Promise<void>;
 
+    /**
+     * Saves a change of state in a synchronous manner.
+     * This method is required by the originator constructor that cannot be defined as asynchronous.
+     */
     syncSave(): UnitOfWorkMemento;
 
+    /**
+     * Restores the state of the originator using a memento.
+     * As specified in the care taker documentation,
+     * the memento currently does not handle any change beside for the 'state' property.
+     * The rest will be implemented as soon as a use case requires it.
+     *
+     * @param memento The memento to use for restoration.
+     */
     restore(memento: UnitOfWorkMemento): void;
 }
 
+/**
+ * Originator required by care taker InMemoryTransaction.
+ */
 @singleton()
 export default class UnitOfWork implements UnitOfWorkOriginatorInterface {
     private state: number;
