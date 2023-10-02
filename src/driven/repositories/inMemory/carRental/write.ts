@@ -15,7 +15,7 @@ export default class InMemoryCarRentalWriteRepository implements CarRentalWriteR
         await this.unitOfWork.saveEntity("carRentals", {
             id: carRentalDTO.id,
             carId: carRentalDTO.car.id,
-            modelId: carRentalDTO.car.modelId,
+            modelId: carRentalDTO.car.model.id,
             dropOffDateTime: carRentalDTO.dropOffDateTime,
             pickupDateTime: carRentalDTO.pickupDateTime,
             customerId: carRentalDTO.customerId,
