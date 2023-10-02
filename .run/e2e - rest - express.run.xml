@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="e2e - rest - express" type="JavaScriptTestRunnerJest">
+    <node-interpreter value="$USER_HOME$/.nvm/versions/node/v20.2.0/bin/node" />
+    <node-options value="" />
+    <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+    <working-dir value="$PROJECT_DIR$" />
+    <jest-options value="express --runInBand --detectOpenHandles --force-exit" />
+    <envs />
+    <scope-kind value="ALL" />
+    <method v="2" />
+  </configuration>
+</component>
