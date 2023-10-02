@@ -1,17 +1,20 @@
 import 'reflect-metadata';
 import {container} from 'tsyringe';
 import {v4} from 'uuid';
+import {DataSource} from 'typeorm';
 import {advanceTo} from 'jest-date-mock';
+import useTypeORMRepositories from '../../../../../src/configuration/injection/containers/repositories/typeorm';
+import useAppDataSource from '../../../../../src/configuration/injection/containers/database';
 import DateParser from '../../../../utils/dateParser';
 import useTestingUtilities from '../../../../configuration/containers/utils';
 import TypeORMCarRentalReadRepository from '../../../../../src/driven/repositories/typeorm/carRental/read';
 import CarRentalDTO from '../../../../../src/core/domain/carRental/dto';
-import useTypeORMRepositories from '../../../../../src/configuration/injection/containers/repositories/typeorm';
-import AppDataSource from '../../../../../src/configuration/database/typeorm/data-source';
 import TypeORMCarRentalFactory from '../../seeding/factories/carRental';
 import TypeORMCustomerFactory from '../../seeding/factories/customer';
 import TypeORMCarFactory from '../../seeding/factories/car';
 import TypeORMCarModelFactory from '../../seeding/factories/carModel';
+import {runDataSourceBeforeEachOps} from '../../utils/setup';
+import {runDataSourceAfterEachOps} from '../../utils/tearDown';
 
 describe.each([
     {
@@ -55,13 +58,13 @@ describe.each([
         advanceTo(Date.now());
         useTestingUtilities();
         dateParser = container.resolve("DateParser");
+        useAppDataSource();
         useTypeORMRepositories();
         repository = container.resolve("CarRentalReadRepositoryInterface");
     })
 
     beforeEach(async () => {
-        await AppDataSource.initialize();
-        await AppDataSource.synchronize();
+        await runDataSourceBeforeEachOps();
         const customer = await new TypeORMCustomerFactory().create({
             id: testCase.rental.customerId,
         });
@@ -98,8 +101,7 @@ describe.each([
     })
 
     afterEach(async () => {
-        await AppDataSource.dropDatabase();
-        await AppDataSource.destroy();
+        await runDataSourceAfterEachOps();
     })
 
     test(`Read a car rental ${testCase.rental.id} should return one car rental`, async () => {

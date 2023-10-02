@@ -4,7 +4,7 @@
   "description": "Support project for software architecture course",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "DOTENV_CONFIG_PATH= jest",
     "lint": "eslint src --ext ts,tsx",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
@@ -24,6 +24,7 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "date-fns": "^2.30.0",
     "deep-clone": "^4.0.0",
+    "dotenv": "^16.3.1",
     "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.28.1",

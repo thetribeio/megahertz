@@ -6,6 +6,8 @@ import TypeORMCarRentalReadRepository from '../../../../driven/repositories/type
  */
 const useTypeORMRepositories = (): void => {
     container.register("CarRentalReadRepositoryInterface", {useClass: TypeORMCarRentalReadRepository});
+    const carRentalReadRepository = container.resolve("CarRentalReadRepositoryInterface");
+    container.registerInstance("CarRentalReadRepositoryInterface", carRentalReadRepository);
 }
 
 export default useTypeORMRepositories;

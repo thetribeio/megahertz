@@ -3,12 +3,20 @@ import CarRental from '../../../../core/domain/carRental/model';
 import Car from '../../../../core/domain/car/model';
 import CarModel from '../../../../core/domain/carModel/model';
 import {TypeORMCarRental} from '../entities';
-import AppDataSource from '../../../../configuration/database/typeorm/data-source';
+import {inject, singleton} from 'tsyringe';
+import {DataSource} from 'typeorm';
 
+@singleton()
 export default class TypeORMCarRentalReadRepository implements CarRentalReadRepositoryInterface {
 
+    private readonly dataSource: DataSource;
+
+    constructor(@inject("DataSource") dataSource: DataSource) {
+        this.dataSource = dataSource;
+    }
+
     async read(carRentalId: string): Promise<CarRental> {
-        const repository = AppDataSource.getRepository(TypeORMCarRental);
+        const repository = this.dataSource.getRepository(TypeORMCarRental);
         const retrievedCarRental = await repository.findOne({
             where: {id: carRentalId},
             relations: ['customer', 'car', 'car.model']

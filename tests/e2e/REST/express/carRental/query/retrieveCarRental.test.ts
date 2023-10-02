@@ -11,11 +11,13 @@ import DateParser from '../../../../../utils/dateParser';
 import useTestingUtilities from '../../../../../configuration/containers/utils';
 import {startServer} from '../../utils/setup';
 import useTypeORMRepositories from '../../../../../../src/configuration/injection/containers/repositories/typeorm';
-import AppDataSource from '../../../../../../src/configuration/database/typeorm/data-source';
 import TypeORMCustomerFactory from '../../../../../integration/typeorm/seeding/factories/customer';
 import TypeORMCarModelFactory from '../../../../../integration/typeorm/seeding/factories/carModel';
 import TypeORMCarFactory from '../../../../../integration/typeorm/seeding/factories/car';
 import TypeORMCarRentalFactory from '../../../../../integration/typeorm/seeding/factories/carRental';
+import useAppDataSource from "../../../../../../src/configuration/injection/containers/database";
+import {runDataSourceBeforeEachOps} from "../../../../../integration/typeorm/utils/setup";
+import {runDataSourceAfterEachOps} from "../../../../../integration/typeorm/utils/tearDown";
 
 
 describe.each([
@@ -60,15 +62,15 @@ describe.each([
     beforeAll(() => {
         advanceTo(Date.now());
         useTestingUtilities();
-        useTypeORMRepositories();
         dateParser = container.resolve("DateParser");
+        useAppDataSource();
+        useTypeORMRepositories();
         expressApp = createApp();
         server = startServer(expressApp);
     })
 
     beforeEach(async () => {
-        await AppDataSource.initialize();
-        await AppDataSource.synchronize();
+        await runDataSourceBeforeEachOps();
         const customer = await new TypeORMCustomerFactory().create({
             id: testCase.rental.customerId,
         });
@@ -106,8 +108,7 @@ describe.each([
     })
 
     afterEach(async () => {
-        await AppDataSource.dropDatabase();
-        await AppDataSource.destroy();
+        await runDataSourceAfterEachOps();
     })
 
     afterAll(async () => {
