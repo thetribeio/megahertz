@@ -1,4 +1,4 @@
-import {BaseEntity, Column, Entity, PrimaryColumn} from 'typeorm';
+import {Entity, PrimaryColumn} from 'typeorm';
 
 @Entity()
 export default class TypeORMCustomer {

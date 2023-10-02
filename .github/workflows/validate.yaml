@@ -19,6 +19,16 @@ jobs:
       - run: yarn lint
   test:
     runs-on: ubuntu-latest
+    services:
+      image: postgres:13.12
+      ports:
+        - "5432:5432"
+      env:
+        PGUSER: user
+        PGPASSWORD: password
+        POSTGRES_USER: user
+        POSTGRES_PASSWORD: password
+        POSTGRES_DB: megahertz
     strategy:
       matrix:
         node-version: [20.x]
