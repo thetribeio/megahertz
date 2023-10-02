@@ -18,6 +18,8 @@ export default class InMemoryCarRentalReadRepository implements CarRentalReadRep
     }
 
     async read(carRentalId: string): Promise<CarRental> {
+        // The code below needs be refactored using composition
+        // See ticket https://github.com/thetribeio/megahertz/issues/14
         const retrievedCarRental: InMemoryCarRental | undefined = _.find(
             this.unitOfWork.carRentals,
             inMemoryCarRental => inMemoryCarRental.id === carRentalId,

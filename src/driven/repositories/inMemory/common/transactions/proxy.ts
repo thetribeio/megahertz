@@ -4,6 +4,9 @@ import {UnitOfWorkOriginatorInterface} from '../unitOfWork';
 import InMemoryTransactionManager from './manager';
 import TransactionInterface from '../../../../../core/domain/common/interfaces/transaction';
 
+/**
+ * Transaction manager proxy that can be used by the system's core.
+ */
 @singleton()
 export default class InMemoryTransactionManagerProxy implements TransactionManagerInterface {
     private transactionManager: InMemoryTransactionManager;
