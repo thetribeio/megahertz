@@ -15,15 +15,15 @@ export default class TypeORMCarRentalReadRepository implements CarRentalReadRepo
         this.dataSource = dataSource;
     }
 
-    async read(carRentalId: string): Promise<CarRental> {
+    async read(id: string): Promise<CarRental> {
         const repository = this.dataSource.getRepository(TypeORMCarRental);
         const retrievedCarRental = await repository.findOne({
-            where: {id: carRentalId},
+            where: {id},
             relations: ['customer', 'car', 'car.model']
         }) as TypeORMCarRental;
 
         return new CarRental({
-            id: carRentalId,
+            id,
             customerId: retrievedCarRental.customer.id,
             totalPrice: retrievedCarRental.totalPrice,
             pickupDateTime: retrievedCarRental.pickupDateTime,
