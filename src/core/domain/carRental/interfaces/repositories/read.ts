@@ -9,7 +9,7 @@ export default interface CarRentalReadRepositoryInterface {
     /**
      * Gets a single car rental based a UID.
      *
-     * @param carRentalId The UID of the car rental to get.
+     * @param id The UID of the car rental to get.
      */
-    read(carRentalId: string): Promise<CarRental>
+    read(id: string): Promise<CarRental>
 }

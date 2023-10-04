@@ -9,7 +9,10 @@ import CarRentalDTO from '../../../../src/core/domain/carRental/dto';
 import useInMemoryRepositories from '../../../../src/configuration/injection/containers/repositories/inMemory';
 import {convertToNumericPrice} from '../../../utils/misc';
 import useTestingUtilities from '../../../configuration/containers/utils';
-import {populateAvailableCarFromTestCase, populateCarsAndCarRentalsFromTestCase} from '../../utils/populateFromTestCase';
+import {
+    populateAvailableCarFromTestCase,
+    populateCarsAndCarRentalsFromTestCase
+} from '../../utils/populateFromTestCase';
 import {CarTestCaseEntry} from '../../utils/testCase.types';
 import InMemoryCarRentalReadRepository from '../../../../src/driven/repositories/inMemory/carRental/read';
 import TransactionInterface from '../../../../src/core/domain/common/interfaces/transaction';
