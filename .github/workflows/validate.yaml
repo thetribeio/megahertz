@@ -4,13 +4,19 @@ on:
     branches:
       - '*'
 jobs:
-  validate-pr:
+#  validate-pr:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: PR conventional commit validation
+#        uses: ytanikin/PRConventionalCommits@v1.1.0
+#        with:
+#          task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
+  check-for-cc:
     runs-on: ubuntu-latest
     steps:
-      - name: PR conventional commit validation
-        uses: ytanikin/PRConventionalCommits@v1.1.0
-        with:
-          task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
+      - name: check-for-cc
+        id: check-for-cc
+        uses: agenthunt/conventional-commit-checker-action@v1.0.0
   lint:
     runs-on: ubuntu-latest
     strategy:
