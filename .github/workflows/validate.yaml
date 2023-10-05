@@ -4,11 +4,18 @@ on:
     branches:
       - '*'
 jobs:
+  validate-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: PR conventional commit validation
+        uses: ytanikin/PRConventionalCommits@v1.1.0
+        with:
+          task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
   lint:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [ 20.x ]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -21,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [ 20.x ]
     services:
       postgres:
         image: postgres:13.12
