@@ -1,12 +1,12 @@
 import 'reflect-metadata';
 import _ from 'lodash';
 import {inject, injectable} from 'tsyringe';
-import CarRentalReadRepositoryInterface from '../../../../core/domain/carRental/interfaces/repositories/read';
-import CarRental from '../../../../core/domain/carRental/model';
+import CarRentalReadRepositoryInterface from 'src/core/domain/carRental/interfaces/repositories/read';
+import CarRental from 'src/core/domain/carRental/model';
 import UnitOfWork from '../common/unitOfWork';
-import Car from '../../../../core/domain/car/model';
+import Car from 'src/core/domain/car/model';
 import InMemoryCarRental from './carRental.entity';
-import CarModel from '../../../../core/domain/carModel/model';
+import CarModel from 'src/core/domain/carModel/model';
 import InMemoryCarModel from '../carModel/carModel.entity';
 
 @injectable()

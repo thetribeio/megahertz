@@ -1,14 +1,14 @@
 import 'reflect-metadata';
 import {inject, injectable} from 'tsyringe';
 import _ from 'lodash';
-import Car from '../../../../core/domain/car/model';
+import Car from 'src/core/domain/car/model';
 import UnitOfWork from '../common/unitOfWork';
-import CarReadRepositoryInterface from '../../../../core/domain/car/interfaces/repositories/read';
+import CarReadRepositoryInterface from 'src/core/domain/car/interfaces/repositories/read';
 import InMemoryCar from './car.entity';
 import InMemoryCarRental from '../carRental/carRental.entity';
-import CarModel from '../../../../core/domain/carModel/model';
+import CarModel from 'src/core/domain/carModel/model';
 import InMemoryCarModel from '../carModel/carModel.entity';
-import UnavailableCarError from '../../../../core/domain/car/errors/unavailable';
+import UnavailableCarError from 'src/core/domain/car/errors/unavailable';
 
 @injectable()
 export default class InMemoryCarReadRepository implements CarReadRepositoryInterface {

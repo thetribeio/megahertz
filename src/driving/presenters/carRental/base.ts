@@ -1,5 +1,5 @@
-import CarRentalView from '../../views/carRental/base';
-import CarRentalDTO from '../../../core/domain/carRental/dto';
+import CarRentalView from 'src/driving/views/carRental/base';
+import CarRentalDTO from 'src/core/domain/carRental/dto';
 
 /**
  * Base presenter for car rental views.

@@ -1,11 +1,11 @@
 import 'reflect-metadata';
 import {v4} from 'uuid';
 import {container} from 'tsyringe';
-import UnitOfWork from '../../../src/driven/repositories/inMemory/common/unitOfWork';
-import DateParser from '../../utils/dateParser';
+import UnitOfWork from 'src/driven/repositories/inMemory/common/unitOfWork';
+import DateParser from 'tests/utils/dateParser';
 import {populateCar, populateCarModel, populateCarRental} from './populate';
 import {CarTestCaseEntry} from './testCase.types';
-import {convertToNumericPrice} from '../../utils/misc';
+import {convertToNumericPrice} from 'tests/utils/misc';
 
 /**
  * Populates the system with an available car and its rentals,

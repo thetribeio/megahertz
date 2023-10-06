@@ -5,19 +5,19 @@ import {advanceTo} from 'jest-date-mock';
 import supertest from 'supertest';
 import express from 'express';
 import http from 'http';
-import createApp from '../../../../../../src/configuration/driving/REST/express/app';
-import CarRentalView from '../../../../../../src/driving/views/carRental/base';
-import DateParser from '../../../../../utils/dateParser';
-import useTestingUtilities from '../../../../../configuration/containers/utils';
+import createApp from 'src/configuration/driving/REST/express/app';
+import CarRentalView from 'src/driving/views/carRental/base';
+import DateParser from 'tests/utils/dateParser';
+import useTestingUtilities from 'tests/configuration/containers/utils';
 import {startServer} from '../../utils/setup';
-import useTypeORMRepositories from '../../../../../../src/configuration/injection/containers/repositories/typeorm';
-import TypeORMCustomerFactory from '../../../../../integration/typeorm/seeding/factories/customer';
-import TypeORMCarModelFactory from '../../../../../integration/typeorm/seeding/factories/carModel';
-import TypeORMCarFactory from '../../../../../integration/typeorm/seeding/factories/car';
-import TypeORMCarRentalFactory from '../../../../../integration/typeorm/seeding/factories/carRental';
-import useAppDataSource from "../../../../../../src/configuration/injection/containers/database";
-import {runDataSourceBeforeEachOps} from "../../../../../integration/typeorm/utils/setup";
-import {runDataSourceAfterEachOps} from "../../../../../integration/typeorm/utils/tearDown";
+import useTypeORMRepositories from 'src/configuration/injection/containers/repositories/typeorm';
+import TypeORMCustomerFactory from 'tests/integration/typeorm/seeding/factories/customer';
+import TypeORMCarModelFactory from 'tests/integration/typeorm/seeding/factories/carModel';
+import TypeORMCarFactory from 'tests/integration/typeorm/seeding/factories/car';
+import TypeORMCarRentalFactory from 'tests/integration/typeorm/seeding/factories/carRental';
+import useAppDataSource from 'src/configuration/injection/containers/database';
+import {runDataSourceBeforeEachOps} from 'tests/integration/typeorm/utils/setup';
+import {runDataSourceAfterEachOps} from 'tests/integration/typeorm/utils/tearDown';
 
 
 describe.each([

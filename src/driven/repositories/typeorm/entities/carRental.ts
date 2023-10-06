@@ -1,5 +1,5 @@
 import {BaseEntity, Column, Entity, OneToOne, PrimaryColumn, JoinColumn} from 'typeorm';
-import {TypeORMCar, TypeORMCustomer} from "./index";
+import {TypeORMCar, TypeORMCustomer} from './index';
 
 @Entity()
 export default class TypeORMCarRental extends BaseEntity {

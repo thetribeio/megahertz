@@ -2,22 +2,22 @@ import 'reflect-metadata';
 import {v4} from 'uuid';
 import {container} from 'tsyringe';
 import {advanceTo} from 'jest-date-mock';
-import DateParser from '../../../utils/dateParser';
-import RentACar from '../../../../src/core/useCases/carRental/rentACar/handler';
-import RentACarCommand from '../../../../src/core/useCases/carRental/rentACar/types/command';
-import CarRentalDTO from '../../../../src/core/domain/carRental/dto';
-import useInMemoryRepositories from '../../../../src/configuration/injection/containers/repositories/inMemory';
-import {convertToNumericPrice} from '../../../utils/misc';
-import useTestingUtilities from '../../../configuration/containers/utils';
+import DateParser from 'tests/utils/dateParser';
+import RentACar from 'src/core/useCases/carRental/rentACar/handler';
+import RentACarCommand from 'src/core/useCases/carRental/rentACar/types/command';
+import CarRentalDTO from 'src/core/domain/carRental/dto';
+import useInMemoryRepositories from 'src/configuration/injection/containers/repositories/inMemory';
+import {convertToNumericPrice} from 'tests/utils/misc';
+import useTestingUtilities from 'tests/configuration/containers/utils';
 import {
     populateAvailableCarFromTestCase,
     populateCarsAndCarRentalsFromTestCase
-} from '../../utils/populateFromTestCase';
-import {CarTestCaseEntry} from '../../utils/testCase.types';
-import InMemoryCarRentalReadRepository from '../../../../src/driven/repositories/inMemory/carRental/read';
-import TransactionInterface from '../../../../src/core/domain/common/interfaces/transaction';
-import TransactionManagerInterface from '../../../../src/core/domain/common/interfaces/transactionManager';
-import UnavailableCarError from '../../../../src/core/domain/car/errors/unavailable';
+} from 'tests/unit/utils/populateFromTestCase';
+import {CarTestCaseEntry} from 'tests/unit/utils/testCase.types';
+import InMemoryCarRentalReadRepository from 'src/driven/repositories/inMemory/carRental/read';
+import TransactionInterface from 'src/core/domain/common/interfaces/transaction';
+import TransactionManagerInterface from 'src/core/domain/common/interfaces/transactionManager';
+import UnavailableCarError from 'src/core/domain/car/errors/unavailable';
 
 describe.each([
     {

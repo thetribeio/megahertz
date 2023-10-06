@@ -1,7 +1,7 @@
 import {inject, injectable} from 'tsyringe';
 import UnitOfWork from '../common/unitOfWork';
-import CarRentalWriteRepositoryInterface from '../../../../core/domain/carRental/interfaces/repositories/write';
-import CarRentalDTO from '../../../../core/domain/carRental/dto';
+import CarRentalWriteRepositoryInterface from 'src/core/domain/carRental/interfaces/repositories/write';
+import CarRentalDTO from 'src/core/domain/carRental/dto';
 
 @injectable()
 export default class InMemoryCarRentalWriteRepository implements CarRentalWriteRepositoryInterface {

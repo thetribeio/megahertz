@@ -1,10 +1,10 @@
 import {v4} from 'uuid';
-import CarRentalDTO from '../../../domain/carRental/dto';
+import CarRentalDTO from 'src/core/domain/carRental/dto';
 import RentACarCommand from './types/command';
-import CarReadRepositoryInterface from '../../../domain/car/interfaces/repositories/read';
-import CarRentalWriteRepositoryInterface from '../../../domain/carRental/interfaces/repositories/write';
-import CarRental from '../../../domain/carRental/model';
-import TransactionManagerInterface from '../../../domain/common/interfaces/transactionManager';
+import CarReadRepositoryInterface from 'src/core/domain/car/interfaces/repositories/read';
+import CarRentalWriteRepositoryInterface from 'src/core/domain/carRental/interfaces/repositories/write';
+import CarRental from 'src/core/domain/carRental/model';
+import TransactionManagerInterface from 'src/core/domain/common/interfaces/transactionManager';
 
 /**
  * Use case class to rent a car for a customer.
