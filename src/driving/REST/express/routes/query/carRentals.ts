@@ -1,8 +1,8 @@
 import {container} from 'tsyringe';
 import {Request, Response, Router} from 'express';
-import RetrieveACarRental from '../../../../../core/useCases/carRental/retrieveACarRental/handler';
-import CarRentalView from "../../../../views/carRental/base";
-import CarRentalPresenter from "../../../../presenters/carRental/base";
+import RetrieveACarRental from 'src/core/useCases/carRental/retrieveACarRental/handler';
+import CarRentalView from 'src/driving/views/carRental/base';
+import CarRentalPresenter from 'src/driving/presenters/carRental/base';
 
 const router = Router();
 

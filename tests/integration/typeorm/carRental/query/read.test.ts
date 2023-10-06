@@ -1,20 +1,19 @@
 import 'reflect-metadata';
 import {container} from 'tsyringe';
 import {v4} from 'uuid';
-import {DataSource} from 'typeorm';
 import {advanceTo} from 'jest-date-mock';
-import useTypeORMRepositories from '../../../../../src/configuration/injection/containers/repositories/typeorm';
-import useAppDataSource from '../../../../../src/configuration/injection/containers/database';
-import DateParser from '../../../../utils/dateParser';
-import useTestingUtilities from '../../../../configuration/containers/utils';
-import TypeORMCarRentalReadRepository from '../../../../../src/driven/repositories/typeorm/carRental/read';
-import CarRentalDTO from '../../../../../src/core/domain/carRental/dto';
-import TypeORMCarRentalFactory from '../../seeding/factories/carRental';
-import TypeORMCustomerFactory from '../../seeding/factories/customer';
-import TypeORMCarFactory from '../../seeding/factories/car';
-import TypeORMCarModelFactory from '../../seeding/factories/carModel';
-import {runDataSourceBeforeEachOps} from '../../utils/setup';
-import {runDataSourceAfterEachOps} from '../../utils/tearDown';
+import useTypeORMRepositories from 'src/configuration/injection/containers/repositories/typeorm';
+import useAppDataSource from 'src/configuration/injection/containers/database';
+import DateParser from 'tests/utils/dateParser';
+import useTestingUtilities from 'tests/configuration/containers/utils';
+import TypeORMCarRentalReadRepository from 'src/driven/repositories/typeorm/carRental/read';
+import CarRentalDTO from 'src/core/domain/carRental/dto';
+import TypeORMCarRentalFactory from 'tests/integration/typeorm/seeding/factories/carRental';
+import TypeORMCustomerFactory from 'tests/integration/typeorm/seeding/factories/customer';
+import TypeORMCarFactory from 'tests/integration/typeorm/seeding/factories/car';
+import TypeORMCarModelFactory from 'tests/integration/typeorm/seeding/factories/carModel';
+import {runDataSourceBeforeEachOps} from 'tests/integration/typeorm/utils/setup';
+import {runDataSourceAfterEachOps} from 'tests/integration/typeorm/utils/tearDown';
 
 describe.each([
     {

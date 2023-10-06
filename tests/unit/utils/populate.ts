@@ -1,5 +1,5 @@
-import UnitOfWork from '../../../src/driven/repositories/inMemory/common/unitOfWork';
-import InMemoryCarModel from '../../../src/driven/repositories/inMemory/carModel/carModel.entity';
+import UnitOfWork from 'src/driven/repositories/inMemory/common/unitOfWork';
+import InMemoryCarModel from 'src/driven/repositories/inMemory/carModel/carModel.entity';
 
 /**
  * Populates the unit of work with a car.

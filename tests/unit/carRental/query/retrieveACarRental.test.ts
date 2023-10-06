@@ -1,18 +1,18 @@
 import 'reflect-metadata';
 import {container} from 'tsyringe';
 import {advanceTo} from 'jest-date-mock';
-import useTestingUtilities from '../../../configuration/containers/utils';
-import RetrieveACarRental from '../../../../src/core/useCases/carRental/retrieveACarRental/handler';
-import DateParser from '../../../utils/dateParser';
-import useInMemoryRepositories from '../../../../src/configuration/injection/containers/repositories/inMemory';
-import TransactionManagerInterface from '../../../../src/core/domain/common/interfaces/transactionManager';
-import TransactionInterface from '../../../../src/core/domain/common/interfaces/transaction';
-import CarRentalDTO from '../../../../src/core/domain/carRental/dto';
-import {convertToNumericPrice} from '../../../utils/misc';
-import RetrieveACarRentalQuery from '../../../../src/core/useCases/carRental/retrieveACarRental/types/query';
+import useTestingUtilities from 'tests/configuration/containers/utils';
+import RetrieveACarRental from 'src/core/useCases/carRental/retrieveACarRental/handler';
+import DateParser from 'tests/utils/dateParser';
+import useInMemoryRepositories from 'src/configuration/injection/containers/repositories/inMemory';
+import TransactionManagerInterface from 'src/core/domain/common/interfaces/transactionManager';
+import TransactionInterface from 'src/core/domain/common/interfaces/transaction';
+import CarRentalDTO from 'src/core/domain/carRental/dto';
+import {convertToNumericPrice} from 'tests/utils/misc';
+import RetrieveACarRentalQuery from 'src/core/useCases/carRental/retrieveACarRental/types/query';
 import {populateCarModel, populateCarRental} from '../../utils/populate';
-import UnitOfWork from '../../../../src/driven/repositories/inMemory/common/unitOfWork';
-import InMemoryCarRentalReadRepository from '../../../../src/driven/repositories/inMemory/carRental/read';
+import UnitOfWork from 'src/driven/repositories/inMemory/common/unitOfWork';
+import InMemoryCarRentalReadRepository from 'src/driven/repositories/inMemory/carRental/read';
 
 describe.each([
     {

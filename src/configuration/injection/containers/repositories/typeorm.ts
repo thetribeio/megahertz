@@ -1,5 +1,5 @@
 import {container} from 'tsyringe';
-import TypeORMCarRentalReadRepository from '../../../../driven/repositories/typeorm/carRental/read';
+import TypeORMCarRentalReadRepository from 'src/driven/repositories/typeorm/carRental/read';
 
 /**
  * Configures tsyringe to use typeORM repositories.

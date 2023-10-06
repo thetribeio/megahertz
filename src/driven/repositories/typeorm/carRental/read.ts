@@ -1,7 +1,7 @@
-import CarRentalReadRepositoryInterface from '../../../../core/domain/carRental/interfaces/repositories/read';
-import CarRental from '../../../../core/domain/carRental/model';
-import Car from '../../../../core/domain/car/model';
-import CarModel from '../../../../core/domain/carModel/model';
+import CarRentalReadRepositoryInterface from 'src/core/domain/carRental/interfaces/repositories/read';
+import CarRental from 'src/core/domain/carRental/model';
+import Car from 'src/core/domain/car/model';
+import CarModel from 'src/core/domain/carModel/model';
 import {TypeORMCarRental} from '../entities';
 import {inject, singleton} from 'tsyringe';
 import {DataSource} from 'typeorm';

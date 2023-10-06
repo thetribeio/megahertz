@@ -1,5 +1,5 @@
 import {container} from 'tsyringe';
-import DateParser from '../../utils/dateParser';
+import DateParser from 'tests/utils/dateParser';
 
 /**
  * Provides tsyringe with testing utilities, such as date parsers.

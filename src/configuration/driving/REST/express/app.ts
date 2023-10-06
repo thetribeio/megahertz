@@ -1,5 +1,5 @@
 import express from 'express';
-import carRentalsQueryRouter from '../../../../driving/REST/express/routes/query/carRentals';
+import carRentalsQueryRouter from 'src/driving/REST/express/routes/query/carRentals';
 
 /**
  * Creates and returns an instance of express.

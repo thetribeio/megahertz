@@ -7,10 +7,11 @@ module.exports = {
     transform: {
         '^.+\\.[jt]sx?$': [
             'ts-jest',
-            // {
-            //     isolatedModules: true,
-            // },
         ],
+    },
+    moduleNameMapper: {
+        'src/(.*)': '<rootDir>/src/$1',
+        'tests/(.*)': '<rootDir>/tests/$1'
     },
     setupFiles: ['jest-date-mock']
 };

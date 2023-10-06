@@ -2,7 +2,7 @@ import {container} from 'tsyringe';
 import {DataSource} from 'typeorm';
 import {v4} from 'uuid';
 import {FactorizedAttrs, Factory} from '@jorgebodega/typeorm-factory';
-import {TypeORMCustomer} from '../../../../../src/driven/repositories/typeorm/entities';
+import {TypeORMCustomer} from 'src/driven/repositories/typeorm/entities';
 
 
 export default class TypeORMCustomerFactory extends Factory<TypeORMCustomer> {

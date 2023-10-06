@@ -1,9 +1,9 @@
 import {container} from 'tsyringe';
-import InMemoryCarReadRepository from '../../../../driven/repositories/inMemory/car/read';
-import UnitOfWork from '../../../../driven/repositories/inMemory/common/unitOfWork';
-import InMemoryCarRentalReadRepository from '../../../../driven/repositories/inMemory/carRental/read';
-import InMemoryCarRentalWriteRepository from '../../../../driven/repositories/inMemory/carRental/write';
-import InMemoryTransactionManagerProxy from '../../../../driven/repositories/inMemory/common/transactions/proxy';
+import InMemoryCarReadRepository from 'src/driven/repositories/inMemory/car/read';
+import UnitOfWork from 'src/driven/repositories/inMemory/common/unitOfWork';
+import InMemoryCarRentalReadRepository from 'src/driven/repositories/inMemory/carRental/read';
+import InMemoryCarRentalWriteRepository from 'src/driven/repositories/inMemory/carRental/write';
+import InMemoryTransactionManagerProxy from 'src/driven/repositories/inMemory/common/transactions/proxy';
 
 /**
  * Configures tsyringe to use inMemory repositories.
