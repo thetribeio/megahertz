@@ -1,5 +1,5 @@
 import CarRentalDTO from 'src/core/domain/carRental/dto';
-import RetrieveACarRentalQuery from './types/query';
+import RetrieveACarRentalQuery from 'src/core/useCases/carRental/query/retrieveACarRental/types/query';
 import CarRentalReadRepositoryInterface from 'src/core/domain/carRental/interfaces/repositories/read';
 
 /**

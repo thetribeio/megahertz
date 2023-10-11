@@ -1,6 +1,6 @@
 import {v4} from 'uuid';
 import CarRentalDTO from 'src/core/domain/carRental/dto';
-import RentACarCommand from './types/command';
+import RentACarCommand from 'src/core/useCases/carRental/command/rentACar/types/command';
 import CarReadRepositoryInterface from 'src/core/domain/car/interfaces/repositories/read';
 import CarRentalWriteRepositoryInterface from 'src/core/domain/carRental/interfaces/repositories/write';
 import CarRental from 'src/core/domain/carRental/model';
