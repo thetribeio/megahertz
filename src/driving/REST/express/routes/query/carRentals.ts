@@ -1,6 +1,6 @@
 import {container} from 'tsyringe';
 import {Request, Response, Router} from 'express';
-import RetrieveACarRental from 'src/core/useCases/carRental/retrieveACarRental/handler';
+import RetrieveACarRental from 'src/core/useCases/carRental/query/retrieveACarRental/handler';
 import CarRentalView from 'src/driving/views/carRental/base';
 import CarRentalPresenter from 'src/driving/presenters/carRental/base';
 
