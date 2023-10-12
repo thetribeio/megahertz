@@ -1,4 +1,5 @@
 import Car from '../../model';
+import CarsPlanningDTO from "src/core/domain/car/outputBoundaries/outputBoundary";
 
 /**
  * Interface for CarReadRepository.
@@ -20,4 +21,6 @@ export default interface CarReadRepositoryInterface {
                            pickupDateTime,
                            dropOffDateTime
                        }: { modelId: string, pickupDateTime: Date, dropOffDateTime: Date }): Promise<Car>;
+
+    getCarsPlanning(): Promise<CarsPlanningDTO>;
 }

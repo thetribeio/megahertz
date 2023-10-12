@@ -41,6 +41,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.1.0",
     "@jorgebodega/typeorm-factory": "^1.4.0",
     "@thetribe/eslint-config-typescript": "^0.5.1",
     "@types/jest": "^29.5.5",

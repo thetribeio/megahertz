@@ -9,6 +9,7 @@ import InMemoryCarRental from '../carRental/carRental.entity';
 import CarModel from 'src/core/domain/carModel/model';
 import InMemoryCarModel from '../carModel/carModel.entity';
 import UnavailableCarError from 'src/core/domain/car/errors/unavailable';
+import CarsPlanningDTO from "src/core/domain/car/outputBoundaries/outputBoundary";
 
 @injectable()
 export default class InMemoryCarReadRepository implements CarReadRepositoryInterface {
@@ -24,7 +25,10 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
      * @param inMemoryCar The in memory car to use for mapping.
      * @param inMemoryCarModel The in memory car model to use for mapping.
      */
-    static toCar({inMemoryCar, inMemoryCarModel}:{inMemoryCar: InMemoryCar, inMemoryCarModel: InMemoryCarModel}): Car {
+    static toCar({
+                     inMemoryCar,
+                     inMemoryCarModel
+                 }: { inMemoryCar: InMemoryCar, inMemoryCarModel: InMemoryCarModel }): Car {
         return new Car({
             id: inMemoryCar.id,
             model: new CarModel({
@@ -34,7 +38,11 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
         })
     }
 
-    async getOneAvailableCar({modelId, pickupDateTime, dropOffDateTime}: { modelId: string, pickupDateTime: Date, dropOffDateTime: Date }): Promise<Car> {
+    async getOneAvailableCar({
+                                 modelId,
+                                 pickupDateTime,
+                                 dropOffDateTime
+                             }: { modelId: string, pickupDateTime: Date, dropOffDateTime: Date }): Promise<Car> {
         // The code below needs be refactored using composition
         // See ticket https://github.com/thetribeio/megahertz/issues/14
         const retrievedCars: InMemoryCar[] = _.filter(
@@ -55,13 +63,38 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
             throw new UnavailableCarError();
         }
         const retrievedCarModel = _.find(
-          this.unitOfWork.carModels,
-          inMemoryCarModel => inMemoryCarModel.id === modelId
+            this.unitOfWork.carModels,
+            inMemoryCarModel => inMemoryCarModel.id === modelId
         ) as InMemoryCarModel;
 
         return InMemoryCarReadRepository.toCar({
             inMemoryCar: retrievedCar,
             inMemoryCarModel: retrievedCarModel,
         })
+    }
+
+    async getCarsPlanning(): Promise<CarsPlanningDTO> {
+        const retrievedCars = this.unitOfWork.cars as InMemoryCar[];
+        const planning = {
+            cars: {}
+        } as CarsPlanningDTO;
+        for (const retrievedCar of retrievedCars) {
+            const retrievedCarRentals: InMemoryCarRental[] = _.filter(
+                this.unitOfWork.carRentals,
+                inMemoryCarRental => inMemoryCarRental.carId === retrievedCar.id,
+            );
+            planning.cars[retrievedCar.id] = {
+                rentals: []
+            }
+            for (const retrievedCarRental of retrievedCarRentals) {
+                planning.cars[retrievedCar.id].rentals.push({
+                    id: retrievedCarRental.id,
+                    pickupDateTime: retrievedCarRental.pickupDateTime,
+                    dropOffDateTime: retrievedCarRental.dropOffDateTime,
+                })
+            }
+        }
+
+        return planning;
     }
 }

@@ -52,7 +52,7 @@ export const populateCarsAndCarRentalsFromTestCase = async (testCase: CarTestCas
         await populateCar({id: car.id, modelId: car.model.id}, unitOfWork);
         for (const carRental of car.rentals) {
             await populateCarRental({
-                id: v4(),
+                id: carRental.id,
                 carId: car.id,
                 dropOffDateTime: dateParser.parse(carRental.dropOffDateTime),
                 modelId: car.model.id,
