@@ -22,5 +22,9 @@ export default interface CarReadRepositoryInterface {
                            dropOffDateTime
                        }: { modelId: string, pickupDateTime: Date, dropOffDateTime: Date }): Promise<Car>;
 
-    getCarsPlanning(): Promise<CarsPlanningDTO>;
+    getCarsPlanning({
+                        startDate,
+                        endDate,
+                        cursor,
+                    }: { startDate: Date, endDate: Date, cursor: null | string }): Promise<CarsPlanningDTO>;
 }

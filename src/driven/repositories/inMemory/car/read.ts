@@ -73,17 +73,44 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
         })
     }
 
-    async getCarsPlanning(): Promise<CarsPlanningDTO> {
-        const retrievedCars = this.unitOfWork.cars as InMemoryCar[];
+    async getCarsPlanning({
+                              startDate,
+                              endDate,
+                              cursor,
+                          }: { startDate: Date, endDate: Date, cursor: string }): Promise<CarsPlanningDTO> {
+        const select = (cars: InMemoryCar[], limit: number, cursor: string): InMemoryCar[] => {
+            const results: InMemoryCar[] = [];
+            const sorted = _.orderBy(cars, ['licensePlate'], ['asc']);
+            const filtered = _.filter(
+                sorted,
+                inMemoryCar => inMemoryCar.licensePlate < cursor
+            )
+            _.forEach(filtered, (car) => {
+                if (results.length === limit) {
+                    return false;
+                }
+                results.push(car);
+            })
+
+            return results;
+        }
+        const retrievedCars = select(this.unitOfWork.cars, 5, cursor);
         const planning = {
-            cars: {}
+            cars: {},
+            cursor: {
+                nextPage: null,
+            },
         } as CarsPlanningDTO;
         for (const retrievedCar of retrievedCars) {
             const retrievedCarRentals: InMemoryCarRental[] = _.filter(
                 this.unitOfWork.carRentals,
-                inMemoryCarRental => inMemoryCarRental.carId === retrievedCar.id,
+                inMemoryCarRental =>
+                    inMemoryCarRental.carId === retrievedCar.id
+                    && inMemoryCarRental.pickupDateTime >= startDate
+                    && inMemoryCarRental.pickupDateTime <= endDate,
             );
             planning.cars[retrievedCar.id] = {
+                licensePlate: retrievedCar.licensePlate,
                 rentals: []
             }
             for (const retrievedCarRental of retrievedCarRentals) {

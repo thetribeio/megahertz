@@ -13,6 +13,7 @@ export type CarModelTestCaseEntry = {
 
 export type CarTestCaseEntry = {
     id: string;
+    licensePlate: string | undefined;
     model: CarModelTestCaseEntry;
     rentals: Array<CarRentalTestCaseEntry>;
 };

@@ -22,7 +22,7 @@ export const populateAvailableCarFromTestCase = async (testCase: CarTestCaseEntr
         dailyRate: convertToNumericPrice(testCase.model.dailyRate as string),
     }, unitOfWork);
 
-    await populateCar({id: testCase.id, modelId: testCase.model.id}, unitOfWork);
+    await populateCar({id: testCase.id, modelId: testCase.model.id, licensePlate: 'AA-123-AA'}, unitOfWork);
 
     for (const rental of testCase.rentals) {
         await populateCarRental({
@@ -49,7 +49,8 @@ export const populateCarsAndCarRentalsFromTestCase = async (testCase: CarTestCas
     const dateParser: DateParser = container.resolve("DateParser");
 
     for (const car of testCase) {
-        await populateCar({id: car.id, modelId: car.model.id}, unitOfWork);
+        const licensePlate = car.licensePlate != undefined ? car.licensePlate : 'AA-123-AA';
+        await populateCar({id: car.id, modelId: car.model.id, licensePlate}, unitOfWork);
         for (const carRental of car.rentals) {
             await populateCarRental({
                 id: carRental.id,

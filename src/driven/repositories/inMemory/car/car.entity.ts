@@ -1,5 +1,6 @@
 type InMemoryCar = {
     id: string;
+    licensePlate: string;
     modelId: string;
 }
 
