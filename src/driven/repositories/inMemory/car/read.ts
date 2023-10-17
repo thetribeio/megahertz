@@ -10,6 +10,7 @@ import CarModel from 'src/core/domain/carModel/model';
 import InMemoryCarModel from '../carModel/carModel.entity';
 import UnavailableCarError from 'src/core/domain/car/errors/unavailable';
 import CarsPlanningDTO from "src/core/domain/car/outputBoundaries/outputBoundary";
+import DecodedCursor from "src/core/domain/common/types/cursor";
 
 @injectable()
 export default class InMemoryCarReadRepository implements CarReadRepositoryInterface {
@@ -77,20 +78,20 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
                               startDate,
                               endDate,
                               cursor,
-                          }: { startDate: Date, endDate: Date, cursor: string }): Promise<CarsPlanningDTO> {
-        const select = (cars: InMemoryCar[], limit: number, cursor: string): InMemoryCar[] => {
+                          }: { startDate: Date, endDate: Date, cursor: DecodedCursor }): Promise<CarsPlanningDTO> {
+        const select = (cars: InMemoryCar[], limit: number, cursor: DecodedCursor): InMemoryCar[] => {
             const results: InMemoryCar[] = [];
             const sorted = _.orderBy(cars, ['licensePlate'], ['asc']);
             const filtered = _.filter(
                 sorted,
-                inMemoryCar => inMemoryCar.licensePlate < cursor
-            )
+                inMemoryCar => cursor.order === 'gte' ? inMemoryCar.licensePlate >= cursor.address : inMemoryCar.licensePlate >= cursor.address
+            );
             _.forEach(filtered, (car) => {
                 if (results.length === limit) {
                     return false;
                 }
                 results.push(car);
-            })
+            });
 
             return results;
         }

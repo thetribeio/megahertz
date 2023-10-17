@@ -1,5 +1,6 @@
 import Car from '../../model';
 import CarsPlanningDTO from "src/core/domain/car/outputBoundaries/outputBoundary";
+import DecodedCursor from "src/core/domain/common/types/cursor";
 
 /**
  * Interface for CarReadRepository.
@@ -22,9 +23,16 @@ export default interface CarReadRepositoryInterface {
                            dropOffDateTime
                        }: { modelId: string, pickupDateTime: Date, dropOffDateTime: Date }): Promise<Car>;
 
+    /**
+     * Gets a cars planning (meaning the planning for a selection of cars) based on date range and a cursor.
+     *
+     * @param startDate
+     * @param endDate
+     * @param cursor
+     */
     getCarsPlanning({
                         startDate,
                         endDate,
                         cursor,
-                    }: { startDate: Date, endDate: Date, cursor: null | string }): Promise<CarsPlanningDTO>;
+                    }: { startDate: Date, endDate: Date, cursor: DecodedCursor }): Promise<CarsPlanningDTO>;
 }

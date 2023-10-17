@@ -2,7 +2,7 @@ type RetrieveCarsPlanningQuery = {
     startDate: Date;
     endDate: Date;
     limit: number;
-    cursor: string;
+    cursor: null | string;
 };
 
 export default RetrieveCarsPlanningQuery;

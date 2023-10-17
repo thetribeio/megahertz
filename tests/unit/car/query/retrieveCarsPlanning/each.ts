@@ -1,3 +1,4 @@
+import {v4} from "uuid";
 import {CarModelTestCaseEntry, CarTestCaseEntry} from "tests/unit/utils/testCase.types";
 
 export const buildCarTestCase = ({id}: { id: string }): CarTestCaseEntry => {
@@ -12,3 +13,11 @@ export const buildCarTestCase = ({id}: { id: string }): CarTestCaseEntry => {
     } as CarTestCaseEntry
 }
 
+export const buildCarTestCases = (numCases: number): CarTestCaseEntry[] => {
+    const testCases = [];
+    for (let i = 0; i < numCases; i++) {
+        testCases.push(buildCarTestCase({id: v4()}))
+    }
+
+    return testCases;
+}
