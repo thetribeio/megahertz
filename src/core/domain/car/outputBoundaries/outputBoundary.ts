@@ -5,12 +5,11 @@ export type CarRentalPlanningDTO = {
 }
 
 export type CarPlanningDTO = {
-    licensePlate: string;
     rentals: CarRentalPlanningDTO[];
 };
 
 type Cursor = {
-    nextPage: null;
+    nextPage: null | string;
 }
 
 type CarPlanningGroupType = {

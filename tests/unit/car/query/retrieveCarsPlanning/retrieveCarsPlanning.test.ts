@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import {container} from "tsyringe";
 import DateParser from "tests/utils/dateParser";
-import {faker} from "@faker-js/faker";
+import {fa, faker} from "@faker-js/faker";
 import {advanceTo} from "jest-date-mock";
 import {v4} from "uuid";
 import _ from "lodash";
@@ -16,12 +16,14 @@ import TransactionInterface from "src/core/domain/common/interfaces/transaction"
 import UnitOfWork from "src/driven/repositories/inMemory/common/unitOfWork";
 import {populateCarModel, populateCarRental} from "tests/unit/utils/populate";
 import RetrieveCarsPlanningQuery from "src/core/useCases/car/query/retrieveCarsPlanning/types/query";
-import UserIsNotAuthorizedToRetrieveCarsPlanningError from "src/core/useCases/car/query/retrieveCarsPlanning/exceptions/notAuthorized";
+import UserIsNotAuthorizedToRetrieveCarsPlanningError
+    from "src/core/useCases/car/query/retrieveCarsPlanning/exceptions/notAuthorized";
 import PermissionsStubGateway from "tests/common/stubs/gateways/permissions/allow";
 import RetrieveCarsPlanningAuthorizer from "src/core/useCases/car/query/retrieveCarsPlanning/authorizer";
 import PermissionsDenyStubGateway from "tests/common/stubs/gateways/permissions/deny";
 import {buildExpectedCarsPlanning} from "tests/unit/car/query/retrieveCarsPlanning/beforeEach";
-import {buildCarTestCase, buildCarTestCases} from "tests/unit/car/query/retrieveCarsPlanning/each";
+import {buildCarTestCases} from "tests/unit/car/query/retrieveCarsPlanning/each";
+import UserPermissionsProfile from "src/core/useCases/common/permissions/types/userPermissionsProfile";
 
 describe.each([
     {
@@ -52,13 +54,18 @@ describe.each([
                         id: '080cf232-38c8-4caa-ad7e-c5d401b3b9de',
                         pickupDateTime: 'today',
                         dropOffDateTime: 'in 2 days',
+                    },
+                    {
+                        id: '080cf232-38c8-4caa-ad7e-c5d401b3b9de',
+                        pickupDateTime: 'yesterday',
+                        dropOffDateTime: 'tomorrow',
                     }
                 ],
             }
         ] as CarTestCaseEntry[],
         rentalsOutsideOfStartDateEndDate: [],
         numCars: 1,
-        numRentals: 1,
+        numRentals: 2,
     },
     {
         query: {
@@ -340,15 +347,20 @@ describe.each([
             uc = new RetrieveCarsPlanning({
                 carReadRepository: container.resolve("CarReadRepositoryInterface"),
                 authorizer: new RetrieveCarsPlanningAuthorizer({
-                    permissionsGateway: new PermissionsStubGateway([]),
+                    permissionsGateway: new PermissionsStubGateway([{
+
+                    } as UserPermissionsProfile]),
                 }),
             });
-            expectedPlanning = buildExpectedCarsPlanning(testCase.cars);
+            expectedPlanning = buildExpectedCarsPlanning(testCase.cars, '', null);
             query = {
                 startDate: dateParser.parse(testCase.query.startDate),
                 endDate: dateParser.parse(testCase.query.endDate),
                 limit: 5,
-                cursor: null,
+                actor: {
+                    id: v4(),
+                },
+                cursor: '',
             }
         })
 
@@ -369,7 +381,7 @@ describe.each([
             },
             startDate: 'today',
             endDate: 'in 10 days',
-            limit: 5,
+            limit: 2,
         },
         models: [
             {
@@ -392,15 +404,12 @@ describe.each([
                     }
                 ],
             },
-            ...buildCarTestCases(10)
+            ...buildCarTestCases(5)
         ] as CarTestCaseEntry[], ['licensePlate'], ['asc']),
-        numCars: 10,
-        numRentals: 1,
     },
 ])(
     "Given I am logged in as front desk employee $query.actor.email from agency $query.agency.name " +
-    "And I have $numCars car(s) " +
-    "And I have $numRentals reservation(s) " +
+    "And I have more than $query.limit car(s) " +
     "When I retrieve the planning for agency $query.agency.name from $query.startDate until $query.endDate ", (testCase) => {
         let uc: RetrieveCarsPlanning;
         let expectedPlanning: CarsPlanningDTO;
@@ -427,20 +436,29 @@ describe.each([
             uc = new RetrieveCarsPlanning({
                 carReadRepository: container.resolve("CarReadRepositoryInterface"),
                 authorizer: new RetrieveCarsPlanningAuthorizer({
-                    permissionsGateway: new PermissionsStubGateway([]),
+                    permissionsGateway: new PermissionsStubGateway([{} as UserPermissionsProfile]),
                 }),
             });
         })
 
-        test(`Then It should return a list of ${testCase.numCars} car(s) with ${testCase.numRentals} car rental(s)`, async () => {
-            const numExecutions = testCase.numCars / testCase.query.limit;
+        test(`Then It should return a list of ${testCase.cars.length} car(s)`, async () => {
+            const numExecutions = testCase.cars.length / testCase.query.limit;
             for (let i = 0; i < numExecutions; i++) {
-                let cursor = i == 0 ? null : btoa(`next___${testCase.cars[testCase.query.limit].licensePlate}`);
-                expectedPlanning = buildExpectedCarsPlanning(testCase.cars.slice((i * testCase.query.limit), ((i + 1) * testCase.query.limit)));
+                let cursor = i == 0 ? '' : btoa(`next___${testCase.cars[testCase.query.limit * i].licensePlate}`);
+                let nextCursor = i < numExecutions - 1 ? btoa(`next___${testCase.cars[testCase.query.limit * i + 1].licensePlate}`) : '';
+                let prevCursor = i > 0 ? btoa(`prev___${testCase.cars[testCase.query.limit * i].licensePlate}`) : '';
+                expectedPlanning = buildExpectedCarsPlanning(
+                    testCase.cars.slice((i * testCase.query.limit), ((i + 1) * testCase.query.limit)),
+                    nextCursor,
+                    prevCursor
+                );
                 query = {
                     startDate: dateParser.parse(testCase.query.startDate),
                     endDate: dateParser.parse(testCase.query.endDate),
                     limit: testCase.query.limit,
+                    actor: {
+                        id: v4(),
+                    },
                     cursor
                 }
                 let retrievedPlanning = await uc.execute(query);
@@ -487,8 +505,11 @@ describe.each([
         query = {
             startDate: dateParser.parse("today"),
             endDate: dateParser.parse("in 7 days"),
+            actor: {
+                id: v4(),
+            },
+            cursor: '',
             limit: 5,
-            cursor: null,
         }
     })
 

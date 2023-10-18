@@ -29,10 +29,12 @@ export default interface CarReadRepositoryInterface {
      * @param startDate
      * @param endDate
      * @param cursor
+     * @param limit
      */
     getCarsPlanning({
                         startDate,
                         endDate,
                         cursor,
-                    }: { startDate: Date, endDate: Date, cursor: DecodedCursor }): Promise<CarsPlanningDTO>;
+                        limit,
+                    }: { startDate: Date, endDate: Date, cursor: DecodedCursor, limit: number }): Promise<CarsPlanningDTO>;
 }

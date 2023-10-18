@@ -3,17 +3,16 @@ import CarsPlanningDTO from "src/core/domain/car/outputBoundaries/outputBoundary
 import DateParser from "tests/utils/dateParser";
 import {CarTestCaseEntry} from "tests/unit/utils/testCase.types";
 
-export const buildExpectedCarsPlanning = (cars: CarTestCaseEntry[]): CarsPlanningDTO => {
+export const buildExpectedCarsPlanning = (cars: CarTestCaseEntry[], nextCursor: string, prevCursor: null | string): CarsPlanningDTO => {
     const dateParser: DateParser = container.resolve("DateParser");
     const expectedPlanning: CarsPlanningDTO = {
         cars: {},
         cursor: {
-            nextPage: null,
+            nextPage: nextCursor,
         }
     }
     for (const carTestCaseEntry of cars) {
         expectedPlanning.cars[carTestCaseEntry.id] = {
-            licensePlate: carTestCaseEntry.licensePlate !== undefined ? carTestCaseEntry.licensePlate : 'AA-123-AA',
             rentals: []
         }
         for (const rentalEntry of carTestCaseEntry.rentals) {

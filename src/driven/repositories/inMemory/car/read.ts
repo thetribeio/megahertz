@@ -11,6 +11,7 @@ import InMemoryCarModel from '../carModel/carModel.entity';
 import UnavailableCarError from 'src/core/domain/car/errors/unavailable';
 import CarsPlanningDTO from "src/core/domain/car/outputBoundaries/outputBoundary";
 import DecodedCursor from "src/core/domain/common/types/cursor";
+import {encodeCursor} from "src/core/useCases/common/cursors/encodeDecode";
 
 @injectable()
 export default class InMemoryCarReadRepository implements CarReadRepositoryInterface {
@@ -74,32 +75,40 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
         })
     }
 
+    findNextCursor(cars: InMemoryCar[]): string {
+        const nextCar = _.find(
+            this.unitOfWork.cars,
+            inMemoryCar => inMemoryCar.licensePlate > cars[cars.length - 1].licensePlate
+        );
+        if (nextCar === undefined) {
+            return "";
+        }
+
+        return cars[cars.length - 1].licensePlate;
+    }
+
     async getCarsPlanning({
                               startDate,
                               endDate,
                               cursor,
-                          }: { startDate: Date, endDate: Date, cursor: DecodedCursor }): Promise<CarsPlanningDTO> {
-        const select = (cars: InMemoryCar[], limit: number, cursor: DecodedCursor): InMemoryCar[] => {
-            const results: InMemoryCar[] = [];
-            const sorted = _.orderBy(cars, ['licensePlate'], ['asc']);
-            const filtered = _.filter(
-                sorted,
-                inMemoryCar => cursor.order === 'gte' ? inMemoryCar.licensePlate >= cursor.address : inMemoryCar.licensePlate >= cursor.address
-            );
-            _.forEach(filtered, (car) => {
-                if (results.length === limit) {
-                    return false;
-                }
-                results.push(car);
-            });
-
-            return results;
-        }
-        const retrievedCars = select(this.unitOfWork.cars, 5, cursor);
+                              limit,
+                          }: { startDate: Date, endDate: Date, cursor: DecodedCursor, limit: number }): Promise<CarsPlanningDTO> {
+        const retrievedCars: InMemoryCar[] = [];
+        const sorted = _.orderBy(this.unitOfWork.cars, ['licensePlate'], ['asc']);
+        const filtered = _.filter(
+            sorted,
+            inMemoryCar => cursor.order === 'gte' ? inMemoryCar.licensePlate >= cursor.address : inMemoryCar.licensePlate >= cursor.address
+        );
+        _.forEach(filtered, (car) => {
+            if (retrievedCars.length === limit) {
+                return false;
+            }
+            retrievedCars.push(car);
+        });
         const planning = {
             cars: {},
             cursor: {
-                nextPage: null,
+                nextPage: encodeCursor(this.findNextCursor(retrievedCars), cursor.order),
             },
         } as CarsPlanningDTO;
         for (const retrievedCar of retrievedCars) {
@@ -107,11 +116,12 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
                 this.unitOfWork.carRentals,
                 inMemoryCarRental =>
                     inMemoryCarRental.carId === retrievedCar.id
-                    && inMemoryCarRental.pickupDateTime >= startDate
-                    && inMemoryCarRental.pickupDateTime <= endDate,
+                    && (
+                        (inMemoryCarRental.pickupDateTime >= startDate && inMemoryCarRental.pickupDateTime <= endDate)
+                        || (inMemoryCarRental.dropOffDateTime > startDate && inMemoryCarRental.pickupDateTime <= startDate)
+                    )
             );
             planning.cars[retrievedCar.id] = {
-                licensePlate: retrievedCar.licensePlate,
                 rentals: []
             }
             for (const retrievedCarRental of retrievedCarRentals) {
