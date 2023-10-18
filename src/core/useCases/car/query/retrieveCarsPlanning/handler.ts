@@ -22,7 +22,7 @@ export default class RetrieveCarsPlanning {
             actorId: query.actor.id,
         });
 
-        return await this.carReadRepository.getCarsPlanning({
+        return this.carReadRepository.getCarsPlanning({
             startDate: query.startDate,
             endDate: query.endDate,
             limit: query.limit,

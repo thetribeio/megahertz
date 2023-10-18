@@ -10,7 +10,7 @@ export const encodeCursor = (cursor: string, order: string): string => {
     if (cursor === ''){
         return '';
     }
-    return btoa(`${order == 'gte' ? 'next' : 'prev'}___${cursor}`);
+    return btoa(`${order === 'gte' ? 'next' : 'prev'}___${cursor}`);
 }
 
 export const decodeCursor = (cursor: string): DecodedCursor => {
@@ -20,11 +20,12 @@ export const decodeCursor = (cursor: string): DecodedCursor => {
             address: ''
         }
     }
+    // eslint-disable-next-line prefer-regex-literals
     const cursorMatch = atob(cursor).match(new RegExp('^(?<order>(next|prev))___(?<address>[\\w\'-]+)$')) as RegExpMatchArray;
     const groups = cursorMatch.groups as any;
 
     return {
-        order: groups.order == 'next' ? 'gte' : 'lte',
+        order: groups.order === 'next' ? 'gte' : 'lte',
         address: groups.address as string,
     }
 }

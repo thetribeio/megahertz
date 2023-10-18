@@ -104,6 +104,8 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
                 return false;
             }
             retrievedCars.push(car);
+
+            return car;
         });
         const planning = {
             cars: {},
