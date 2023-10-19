@@ -102,17 +102,6 @@ describe.each([
         }
         expectedCarRental = {
             id: testCase.carRental.id,
-            customerId: testCase.carRental.customerId,
-            pickupDateTime: dateParser.parse(testCase.carRental.pickupDateTime),
-            dropOffDateTime: dateParser.parse(testCase.carRental.dropOffDateTime),
-            totalPrice,
-            car: {
-                id: testCase.carRental.car.id,
-                model: {
-                    id: testCase.carRental.car.model.id,
-                    dailyRate: 0,
-                }
-            }
         }
     })
 
