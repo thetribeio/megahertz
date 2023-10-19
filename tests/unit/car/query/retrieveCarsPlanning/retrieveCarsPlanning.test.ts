@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import {container} from "tsyringe";
 import DateParser from "tests/utils/dateParser";
-import {fa, faker} from "@faker-js/faker";
+import {faker} from "@faker-js/faker";
 import {advanceTo} from "jest-date-mock";
 import {v4} from "uuid";
 import _ from "lodash";
@@ -407,6 +407,42 @@ describe.each([
             ...buildCarTestCases(5)
         ] as CarTestCaseEntry[], ['licensePlate'], ['asc']),
     },
+    {
+        query: {
+            actor: {
+                email: faker.internet.email({provider: "megahertz.com"}),
+            },
+            agency: {
+                name: 'MegaHertz Paris Opera',
+            },
+            startDate: 'today',
+            endDate: 'in 10 days',
+            limit: 3,
+        },
+        models: [
+            {
+                id: '086e0785-b788-479d-a2b2-a193f9805859',
+                name: 'Aston Martin V8',
+            }
+        ],
+        cars: _.orderBy([
+            {
+                id: v4(),
+                model: {
+                    id: '086e0785-b788-479d-a2b2-a193f9805859',
+                },
+                licensePlate: 'AA-123-AA',
+                rentals: [
+                    {
+                        id: '080cf232-38c8-4caa-ad7e-c5d401b3b9de',
+                        pickupDateTime: 'today',
+                        dropOffDateTime: 'in 2 days',
+                    }
+                ],
+            },
+            ...buildCarTestCases(5)
+        ] as CarTestCaseEntry[], ['licensePlate'], ['asc']),
+    },
 ])(
     "Given I am logged in as front desk employee $query.actor.email from agency $query.agency.name " +
     "And I have more than $query.limit car(s) " +
@@ -441,8 +477,8 @@ describe.each([
             });
         })
 
-        test(`Then It should return a list of ${testCase.cars.length} car(s)`, async () => {
-            const numExecutions = testCase.cars.length / testCase.query.limit;
+        test(`Then It should return a list of ${testCase.query.limit} car(s)`, async () => {
+            const numExecutions = testCase.cars.length % testCase.query.limit;
             for (let i = 0; i < numExecutions; i++) {
                 let cursor = i == 0 ? '' : btoa(`next___${testCase.cars[testCase.query.limit * i].licensePlate}`);
                 let nextCursor = i < numExecutions - 1 ? btoa(`next___${testCase.cars[testCase.query.limit * i + 1].licensePlate}`) : '';

@@ -13,6 +13,11 @@ export const encodeCursor = (cursor: string, order: string): string => {
     return btoa(`${order === 'gte' ? 'next' : 'prev'}___${cursor}`);
 }
 
+/**
+ * Decodes a cursor address from a base64 format.
+ *
+ * @param cursor The cursor address to decode
+ */
 export const decodeCursor = (cursor: string): DecodedCursor => {
     if (cursor === '') {
         return {
