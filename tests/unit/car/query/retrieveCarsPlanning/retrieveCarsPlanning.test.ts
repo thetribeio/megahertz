@@ -347,9 +347,7 @@ describe.each([
             uc = new RetrieveCarsPlanning({
                 carReadRepository: container.resolve("CarReadRepositoryInterface"),
                 authorizer: new RetrieveCarsPlanningAuthorizer({
-                    permissionsGateway: new PermissionsStubGateway([{
-
-                    } as UserPermissionsProfile]),
+                    permissionsGateway: new PermissionsStubGateway([{} as UserPermissionsProfile]),
                 }),
             });
             expectedPlanning = buildExpectedCarsPlanning(testCase.cars, '', null);
@@ -443,6 +441,42 @@ describe.each([
             ...buildCarTestCases(5)
         ] as CarTestCaseEntry[], ['licensePlate'], ['asc']),
     },
+    {
+        query: {
+            actor: {
+                email: faker.internet.email({provider: "megahertz.com"}),
+            },
+            agency: {
+                name: 'MegaHertz Paris Opera',
+            },
+            startDate: 'today',
+            endDate: 'in 10 days',
+            limit: 3,
+        },
+        models: [
+            {
+                id: '086e0785-b788-479d-a2b2-a193f9805859',
+                name: 'Aston Martin V8',
+            }
+        ],
+        cars: _.orderBy([
+            {
+                id: v4(),
+                model: {
+                    id: '086e0785-b788-479d-a2b2-a193f9805859',
+                },
+                licensePlate: 'AA-123-AA',
+                rentals: [
+                    {
+                        id: '080cf232-38c8-4caa-ad7e-c5d401b3b9de',
+                        pickupDateTime: 'today',
+                        dropOffDateTime: 'in 2 days',
+                    }
+                ],
+            },
+            ...buildCarTestCases(9)
+        ] as CarTestCaseEntry[], ['licensePlate'], ['asc']),
+    },
 ])(
     "Given I am logged in as front desk employee $query.actor.email from agency $query.agency.name " +
     "And I have more than $query.limit car(s) " +
@@ -478,10 +512,10 @@ describe.each([
         })
 
         test(`Then It should return a list of ${testCase.query.limit} car(s)`, async () => {
-            const numExecutions = testCase.cars.length % testCase.query.limit;
+            const numExecutions = Math.ceil(testCase.cars.length / testCase.query.limit);
             for (let i = 0; i < numExecutions; i++) {
                 let cursor = i == 0 ? '' : btoa(`next___${testCase.cars[testCase.query.limit * i].licensePlate}`);
-                let nextCursor = i < numExecutions - 1 ? btoa(`next___${testCase.cars[testCase.query.limit * i + 1].licensePlate}`) : '';
+                let nextCursor = i < numExecutions - 1 ? btoa(`next___${testCase.cars[testCase.query.limit * (i + 1)].licensePlate}`) : '';
                 let prevCursor = i > 0 ? btoa(`prev___${testCase.cars[testCase.query.limit * i].licensePlate}`) : '';
                 expectedPlanning = buildExpectedCarsPlanning(
                     testCase.cars.slice((i * testCase.query.limit), ((i + 1) * testCase.query.limit)),

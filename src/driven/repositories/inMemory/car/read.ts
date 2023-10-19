@@ -84,7 +84,7 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
             return "";
         }
 
-        return cars[cars.length - 1].licensePlate;
+        return nextCar.licensePlate;
     }
 
     async getCarsPlanning({
