@@ -1,18 +1,21 @@
 import UnitOfWork from 'src/driven/repositories/inMemory/common/unitOfWork';
 import InMemoryCarModel from 'src/driven/repositories/inMemory/carModel/carModel.entity';
+import InMemoryCar from "src/driven/repositories/inMemory/car/car.entity";
 
 /**
  * Populates the unit of work with a car.
  *
  * @param id The car UID.
  * @param modelId The car model UID.
+ * @param licensePlate The car license plate.
  * @param unitOfWork The unit of work that will be populated.
  */
-export const populateCar = async ({id, modelId}: { id: string, modelId: string }, unitOfWork: UnitOfWork) => {
+export const populateCar = async ({id, modelId, licensePlate}: { id: string, modelId: string, licensePlate: string }, unitOfWork: UnitOfWork) => {
     await unitOfWork.saveEntity("cars", {
         id,
         modelId,
-    })
+        licensePlate,
+    } as InMemoryCar)
 }
 
 /**

@@ -1,15 +1,20 @@
-export type CarModelTestCaseEntry = {
-    name: string | undefined;
+export type CarRentalTestCaseEntry = {
     id: string;
-    dailyRate: string | undefined;
     pickupDateTime: string;
     dropOffDateTime: string;
     customerId: string | undefined;
 };
 
+export type CarModelTestCaseEntry = {
+    id: string;
+    name: string | undefined;
+    dailyRate: string | undefined;
+}
+
 export type CarTestCaseEntry = {
     id: string;
+    licensePlate: string | undefined;
     model: CarModelTestCaseEntry;
-    rentals: Array<CarModelTestCaseEntry>;
+    rentals: Array<CarRentalTestCaseEntry>;
 };
 

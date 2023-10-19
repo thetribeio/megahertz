@@ -41,6 +41,12 @@ class MatchersRegistry {
                 }
             }),
             new Matcher({
+                match: /^(?<days>\d+) days ago$/,
+                handler: ({match, groups}: { match: RegExpMatchArray, groups: BaseMatchGroups }) => {
+                    return sub(new Date(), {days: Number(groups.days)});
+                }
+            }),
+            new Matcher({
                 match: /^today$/,
                 handler: ({match, groups}: { match: RegExpMatchArray, groups: BaseMatchGroups }) => {
                     return new Date();
