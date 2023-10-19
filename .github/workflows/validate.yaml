@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - '*'
-      - '!*-exercise-base-*'
+      - '!exercise-base-*'
 jobs:
   lint:
     runs-on: ubuntu-latest
