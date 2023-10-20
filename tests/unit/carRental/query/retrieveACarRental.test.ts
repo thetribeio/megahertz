@@ -97,16 +97,25 @@ describe.each([
         uc = new RetrieveACarRental({
             carRentalReadRepository,
         });
-        query = {
-            id: testCase.carRental.id
-        }
+        query = {}
         expectedCarRental = {
             id: testCase.carRental.id,
+            customerId: testCase.carRental.customerId,
+            pickupDateTime: dateParser.parse(testCase.carRental.pickupDateTime),
+            dropOffDateTime: dateParser.parse(testCase.carRental.dropOffDateTime),
+            totalPrice,
+            car: {
+                id: testCase.carRental.car.id,
+                model: {
+                    id: testCase.carRental.car.model.id,
+                    dailyRate: 0,
+                }
+            }
         }
     })
 
     it(`Then it should return one car rental with ID ${testCase.carRental.id}`, async () => {
-        const carRental = await uc.execute(query);
+        const carRental = await uc.execute();
         expect(carRental).toEqual(expectedCarRental);
     })
 })
