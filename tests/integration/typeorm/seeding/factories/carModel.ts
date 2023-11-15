@@ -6,7 +6,7 @@ import {TypeORMCarModel} from 'src/driven/repositories/typeorm/entities';
 
 export default class TypeORMCarModelFactory extends Factory<TypeORMCarModel> {
     protected entity = TypeORMCarModel;
-    protected dataSource = container.resolve("DataSource") as DataSource;
+    protected dataSource = container.resolve("CommandDataSource") as DataSource;
 
     protected attrs(): FactorizedAttrs<TypeORMCarModel> {
         return {
