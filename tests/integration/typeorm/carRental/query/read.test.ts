@@ -3,7 +3,7 @@ import {container} from 'tsyringe';
 import {v4} from 'uuid';
 import {advanceTo} from 'jest-date-mock';
 import useTypeORMRepositories from 'src/configuration/injection/containers/repositories/typeorm';
-import useAppDataSource from 'src/configuration/injection/containers/database';
+import useAppDataSources from 'src/configuration/injection/containers/database';
 import DateParser from 'tests/utils/dateParser';
 import useTestingUtilities from 'tests/configuration/containers/utils';
 import TypeORMCarRentalReadRepository from 'src/driven/repositories/typeorm/carRental/read';
@@ -57,7 +57,7 @@ describe.each([
         advanceTo(Date.now());
         useTestingUtilities();
         dateParser = container.resolve("DateParser");
-        useAppDataSource();
+        useAppDataSources();
         useTypeORMRepositories();
         repository = container.resolve("CarRentalReadRepositoryInterface");
     })

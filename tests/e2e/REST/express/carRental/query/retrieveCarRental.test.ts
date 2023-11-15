@@ -15,7 +15,7 @@ import TypeORMCustomerFactory from 'tests/integration/typeorm/seeding/factories/
 import TypeORMCarModelFactory from 'tests/integration/typeorm/seeding/factories/carModel';
 import TypeORMCarFactory from 'tests/integration/typeorm/seeding/factories/car';
 import TypeORMCarRentalFactory from 'tests/integration/typeorm/seeding/factories/carRental';
-import useAppDataSource from 'src/configuration/injection/containers/database';
+import useAppDataSources from 'src/configuration/injection/containers/database';
 import {runDataSourceBeforeEachOps} from 'tests/integration/typeorm/utils/setup';
 import {runDataSourceAfterEachOps} from 'tests/integration/typeorm/utils/tearDown';
 
@@ -63,7 +63,7 @@ describe.each([
         advanceTo(Date.now());
         useTestingUtilities();
         dateParser = container.resolve("DateParser");
-        useAppDataSource();
+        useAppDataSources();
         useTypeORMRepositories();
         expressApp = createApp();
         server = startServer(expressApp);
