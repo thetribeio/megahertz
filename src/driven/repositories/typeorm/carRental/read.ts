@@ -11,7 +11,7 @@ export default class TypeORMCarRentalReadRepository implements CarRentalReadRepo
 
     private readonly dataSource: DataSource;
 
-    constructor(@inject("QueryDataSource") dataSource: DataSource) {
+    constructor(@inject("DataSource") dataSource: DataSource) {
         this.dataSource = dataSource;
     }
 

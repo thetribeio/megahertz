@@ -14,6 +14,11 @@ import TypeORMCarFactory from 'tests/integration/typeorm/seeding/factories/car';
 import TypeORMCarModelFactory from 'tests/integration/typeorm/seeding/factories/carModel';
 import {runDataSourceBeforeEachOps} from 'tests/integration/typeorm/utils/setup';
 import {runDataSourceAfterEachOps} from 'tests/integration/typeorm/utils/tearDown';
+import {
+    populateCarAndCarModelFromCarRentalTestCase,
+    populateCustomerFromCarRentalTestCase
+} from "tests/integration/typeorm/carRental/utils/populateFromTestCase";
+import {expectedCarRentalFromTestCase} from "tests/integration/typeorm/utils/misc";
 
 describe.each([
     {
@@ -48,7 +53,7 @@ describe.each([
             dropOffDateTime: 'in 2 days',
         }
     },
-])("Integration tests to read car rentals from a postgres database using typeorm", (testCase) => {
+])("Integration tests to read car rental  from a postgres database using typeorm", (testCase) => {
     let repository: TypeORMCarRentalReadRepository;
     let expectedCarRental: Partial<CarRentalDTO>;
     let dateParser: DateParser;
@@ -56,25 +61,16 @@ describe.each([
     beforeAll(async () => {
         advanceTo(Date.now());
         useTestingUtilities();
-        dateParser = container.resolve("DateParser");
         useAppDataSources();
         useTypeORMRepositories();
+        dateParser = container.resolve("DateParser");
         repository = container.resolve("CarRentalReadRepositoryInterface");
     })
 
     beforeEach(async () => {
         await runDataSourceBeforeEachOps();
-        const customer = await new TypeORMCustomerFactory().create({
-            id: testCase.rental.customerId,
-        });
-        const model = await new TypeORMCarModelFactory().create({
-            id: testCase.rental.car.model.id,
-            dailyRate: testCase.rental.car.model.dailyRate,
-        });
-        const car = await new TypeORMCarFactory().create({
-            id: testCase.rental.car.id,
-            model
-        });
+        const customer = await populateCustomerFromCarRentalTestCase(testCase.rental);
+        const car = await populateCarAndCarModelFromCarRentalTestCase(testCase.rental);
         await new TypeORMCarRentalFactory().create({
             id: testCase.rental.id,
             totalPrice: testCase.rental.totalPrice,
@@ -83,20 +79,10 @@ describe.each([
             customer,
             car,
         });
-        expectedCarRental = {
-            id: testCase.rental.id,
-            customerId: testCase.rental.customerId,
-            car: {
-                id: testCase.rental.car.id,
-                model: {
-                    id: testCase.rental.car.model.id,
-                    dailyRate: testCase.rental.car.model.dailyRate,
-                },
-            },
-            pickupDateTime: dateParser.parse(testCase.rental.pickupDateTime),
-            dropOffDateTime: dateParser.parse(testCase.rental.dropOffDateTime),
-            totalPrice: testCase.rental.totalPrice,
-        }
+        expectedCarRental = expectedCarRentalFromTestCase(
+            testCase.rental,
+            dateParser,
+        );
     })
 
     afterEach(async () => {
