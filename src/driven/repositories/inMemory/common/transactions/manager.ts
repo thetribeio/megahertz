@@ -12,7 +12,8 @@ export default class InMemoryTransactionManager {
     }
 
     /**
-     * Returns a new in memory transaction.
+     * Creates and returns a new transaction
+     * that can be used to commit without the need of the method startTransaction().
      */
     newTransaction(): InMemoryTransaction {
         return new InMemoryTransaction(this.unitOfWork);

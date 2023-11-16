@@ -13,6 +13,7 @@ import RetrieveACarRentalQuery from 'src/core/useCases/carRental/query/retrieveA
 import {populateCarModel, populateCarRental} from '../../utils/populate';
 import UnitOfWork from 'src/driven/repositories/inMemory/common/unitOfWork';
 import InMemoryCarRentalReadRepository from 'src/driven/repositories/inMemory/carRental/read';
+import InMemoryTransactionManager from "src/driven/repositories/inMemory/common/transactions/manager";
 
 describe.each([
     {
@@ -76,7 +77,7 @@ describe.each([
     beforeEach(async () => {
         useInMemoryRepositories();
         const unitOfWork: UnitOfWork = container.resolve("UnitOfWork");
-        const transactionManager: TransactionManagerInterface = container.resolve("TransactionManagerInterface");
+        const transactionManager: InMemoryTransactionManager = container.resolve("TransactionManagerInterface");
         const transaction: TransactionInterface = transactionManager.newTransaction();
         const totalPrice = convertToNumericPrice(testCase.carRental.totalPrice);
         await populateCarRental({

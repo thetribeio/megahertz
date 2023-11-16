@@ -11,7 +11,7 @@ const useAppDataSources = (): void => {
     const AppDataSource = new DataSource({
         type: "postgres",
         synchronize: true,
-        logging: true,
+        logging: false,
         entities: ['src/driven/repositories/typeorm/entities/*.{ts,js}'],
         subscribers: [],
         migrations: ['src/driven/repositories/typeorm/migrations/*.{ts,js}'],
