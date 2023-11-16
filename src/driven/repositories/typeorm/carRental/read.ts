@@ -4,7 +4,7 @@ import Car from 'src/core/domain/car/model';
 import CarModel from 'src/core/domain/carModel/model';
 import {TypeORMCarRental} from '../entities';
 import {inject, singleton} from 'tsyringe';
-import {DataSource} from 'typeorm';
+import {DataSource, SelectQueryBuilder} from 'typeorm';
 
 @singleton()
 export default class TypeORMCarRentalReadRepository implements CarRentalReadRepositoryInterface {
@@ -15,12 +15,18 @@ export default class TypeORMCarRentalReadRepository implements CarRentalReadRepo
         this.dataSource = dataSource;
     }
 
+    private async queryBuilder(): Promise<SelectQueryBuilder<TypeORMCarRental>> {
+        const queryRunner = this.dataSource.createQueryRunner("slave");
+        return this.dataSource
+            .createQueryBuilder(TypeORMCarRental, "car", queryRunner)
+            .setQueryRunner(queryRunner);
+    }
+
     async read(id: string): Promise<CarRental> {
-        const repository = this.dataSource.getRepository(TypeORMCarRental);
-        const retrievedCarRental = await repository.findOne({
-            where: {id},
-            relations: ['customer', 'car', 'car.model']
-        }) as TypeORMCarRental;
+        const queryBuilder = await this.queryBuilder();
+        const retrievedCarRental = await queryBuilder
+            .setFindOptions({where: {id}, relations: ['customer', 'car', 'car.model']})
+            .getOne() as TypeORMCarRental;
 
         return new CarRental({
             id,
