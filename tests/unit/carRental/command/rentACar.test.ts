@@ -18,6 +18,7 @@ import InMemoryCarRentalReadRepository from 'src/driven/repositories/inMemory/ca
 import TransactionInterface from 'src/core/domain/common/interfaces/transaction';
 import TransactionManagerInterface from 'src/core/domain/common/interfaces/transactionManager';
 import UnavailableCarError from 'src/core/domain/car/errors/unavailable';
+import InMemoryTransactionManager from "src/driven/repositories/inMemory/common/transactions/manager";
 
 describe.each([
     {
@@ -129,7 +130,7 @@ describe.each([
 
     beforeEach(async () => {
         useInMemoryRepositories();
-        const transactionManager: TransactionManagerInterface = container.resolve("TransactionManagerInterface");
+        const transactionManager: InMemoryTransactionManager = container.resolve("TransactionManagerInterface");
         const transaction: TransactionInterface = transactionManager.newTransaction();
         await populateCarsAndCarRentalsFromTestCase(testCase.cars);
         await populateAvailableCarFromTestCase(testCase.availableCar as CarTestCaseEntry);
@@ -215,7 +216,7 @@ describe.each([
 
     beforeEach(async () => {
         useInMemoryRepositories();
-        const transactionManager: TransactionManagerInterface = container.resolve("TransactionManagerInterface");
+        const transactionManager: InMemoryTransactionManager = container.resolve("TransactionManagerInterface");
         const transaction: TransactionInterface = transactionManager.newTransaction();
         await populateAvailableCarFromTestCase(testCase.availableCar as CarTestCaseEntry);
         await transaction.commit();

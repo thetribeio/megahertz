@@ -24,6 +24,7 @@ import PermissionsDenyStubGateway from "tests/common/stubs/gateways/permissions/
 import {buildExpectedCarsPlanning} from "tests/unit/car/query/retrieveCarsPlanning/beforeEach";
 import {buildCarTestCases} from "tests/unit/car/query/retrieveCarsPlanning/each";
 import UserPermissionsProfile from "src/core/useCases/common/permissions/types/userPermissionsProfile";
+import InMemoryTransactionManager from "src/driven/repositories/inMemory/common/transactions/manager";
 
 describe.each([
     {
@@ -324,7 +325,7 @@ describe.each([
 
         beforeEach(async () => {
             useInMemoryRepositories();
-            const transactionManager: TransactionManagerInterface = container.resolve("TransactionManagerInterface");
+            const transactionManager: InMemoryTransactionManager = container.resolve("TransactionManagerInterface");
             const transaction: TransactionInterface = transactionManager.newTransaction();
             const unitOfWork: UnitOfWork = container.resolve("UnitOfWork");
             await populateCarModel({
@@ -494,7 +495,7 @@ describe.each([
 
         beforeEach(async () => {
             useInMemoryRepositories();
-            const transactionManager: TransactionManagerInterface = container.resolve("TransactionManagerInterface");
+            const transactionManager: InMemoryTransactionManager = container.resolve("TransactionManagerInterface");
             const transaction: TransactionInterface = transactionManager.newTransaction();
             const unitOfWork: UnitOfWork = container.resolve("UnitOfWork");
             await populateCarModel({
