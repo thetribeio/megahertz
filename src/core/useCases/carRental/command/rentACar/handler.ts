@@ -32,7 +32,7 @@ export default class RentACar {
 
     async execute(command: RentACarCommand): Promise<CarRentalDTO> {
         await this.transactionManager.startTransaction();
-        // EXERCISE #3: MISSING CODE HERE
+        // EXERCISE #2: MISSING CODE HERE
         await this.transactionManager.commit();
 
         return carRentalDTO;

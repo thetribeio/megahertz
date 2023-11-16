@@ -48,7 +48,7 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
         // The code below needs be refactored using composition
         // See ticket https://github.com/thetribeio/megahertz/issues/14
 
-        // EXERCISE #3: MISSING CODE HERE
+        // EXERCISE #2: MISSING CODE HERE
 
         return InMemoryCarReadRepository.toCar({
             inMemoryCar: retrievedCar,

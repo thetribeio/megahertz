@@ -22,7 +22,7 @@ export default class Car {
         this.model = model;
     }
 
-    // EXERCISE #3: MISSING CODE HERE
+    // EXERCISE #2: MISSING CODE HERE
 
     /**
      * Returns a car DTO (Data Transfer Object)

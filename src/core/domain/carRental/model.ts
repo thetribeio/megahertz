@@ -38,7 +38,7 @@ export default class CarRental {
         this.dropOffDateTime = dropOffDateTime;
     }
 
-    // EXERCISE #3: MISSING CODE HERE
+    // EXERCISE #2: MISSING CODE HERE
 
     /**
      * Returns a car rental DTO (Data Transfer Object)

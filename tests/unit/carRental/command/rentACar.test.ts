@@ -142,7 +142,7 @@ describe.each([
             transactionManager: container.resolve("TransactionManagerInterface"),
         });
         command = {
-            // EXERCISE #3: MISSING CODE HERE
+            // EXERCISE #2: MISSING CODE HERE
         };
         expectedCarRental = {
             customerId: testCase.command.customer.id,
@@ -162,9 +162,9 @@ describe.each([
     it(
         `Then it should create a new car rental for a total of ${testCase.expected.totalPrice}`, async () => {
             const carRental = await uc.execute(command);
-            // EXERCISE #3: MISSING CODE HERE
+            // EXERCISE #2: MISSING CODE HERE
             expect(carRental).toEqual(expectedCarRental);
-            // EXERCISE #3: MISSING CODE HERE
+            // EXERCISE #2: MISSING CODE HERE
         })
 });
 
@@ -231,6 +231,6 @@ describe.each([
 
     it(
         `Then it should raise an error 'UnavailableCarError'`, async () => {
-            // EXERCISE #3: MISSING CODE HERE
+            // EXERCISE #2: MISSING CODE HERE
         })
 })
