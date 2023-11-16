@@ -9,9 +9,6 @@ import useTestingUtilities from 'tests/configuration/containers/utils';
 import TypeORMCarRentalReadRepository from 'src/driven/repositories/typeorm/carRental/read';
 import CarRentalDTO from 'src/core/domain/carRental/dto';
 import TypeORMCarRentalFactory from 'tests/integration/typeorm/seeding/factories/carRental';
-import TypeORMCustomerFactory from 'tests/integration/typeorm/seeding/factories/customer';
-import TypeORMCarFactory from 'tests/integration/typeorm/seeding/factories/car';
-import TypeORMCarModelFactory from 'tests/integration/typeorm/seeding/factories/carModel';
 import {runDataSourceBeforeEachOps} from 'tests/integration/typeorm/utils/setup';
 import {runDataSourceAfterEachOps} from 'tests/integration/typeorm/utils/tearDown';
 import {

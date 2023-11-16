@@ -9,7 +9,6 @@ import {runDataSourceBeforeEachOps} from "tests/integration/typeorm/utils/setup"
 import DateParser from "tests/utils/dateParser";
 import {advanceTo} from "jest-date-mock";
 import useTestingUtilities from "tests/configuration/containers/utils";
-import {DataSource} from "typeorm";
 import {v4} from "uuid";
 import {runDataSourceAfterEachOps} from "tests/integration/typeorm/utils/tearDown";
 import {
@@ -17,6 +16,7 @@ import {
     populateCustomerFromCarRentalTestCase
 } from "tests/integration/typeorm/carRental/utils/populateFromTestCase";
 import {expectedCarRentalFromTestCase} from "tests/integration/typeorm/utils/misc";
+import TypeORMTransactionManager from "src/driven/repositories/typeorm/common/transactionManager";
 
 describe.each([
     {
@@ -57,6 +57,7 @@ describe.each([
     let carRentalToCreate: CarRentalDTO;
     let expectedCarRental: CarRentalDTO;
     let dateParser: DateParser;
+    let transactionManager: TypeORMTransactionManager;
 
     beforeAll(() => {
         advanceTo(Date.now());
@@ -70,6 +71,7 @@ describe.each([
         repository = container.resolve("CarRentalWriteRepositoryInterface");
         readRepository = container.resolve("CarRentalReadRepositoryInterface");
         await runDataSourceBeforeEachOps();
+        transactionManager = container.resolve("TransactionManagerInterface");
         await populateCustomerFromCarRentalTestCase(testCase.rental);
         await populateCarAndCarModelFromCarRentalTestCase(testCase.rental);
         expectedCarRental = expectedCarRentalFromTestCase(
@@ -84,13 +86,9 @@ describe.each([
     })
 
     test(`Create a car rental ${testCase.rental.id} should create one car rental in the database`, async () => {
-        const dataSource: DataSource = container.resolve("DataSource");
-        const queryRunner = dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
+        await transactionManager.startTransaction();
         await repository.create(carRentalToCreate);
-        await queryRunner.commitTransaction();
-        await queryRunner.release();
+        await transactionManager.commit();
         const retrievedCarRental = await readRepository.read(testCase.rental.id);
         expect(retrievedCarRental.toDTO()).toEqual(expectedCarRental);
     })
