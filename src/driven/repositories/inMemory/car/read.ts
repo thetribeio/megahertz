@@ -47,27 +47,8 @@ export default class InMemoryCarReadRepository implements CarReadRepositoryInter
                              }: { modelId: string, pickupDateTime: Date, dropOffDateTime: Date }): Promise<Car> {
         // The code below needs be refactored using composition
         // See ticket https://github.com/thetribeio/megahertz/issues/14
-        const retrievedCars: InMemoryCar[] = _.filter(
-            this.unitOfWork.cars,
-            inMemoryCar => inMemoryCar.modelId === modelId
-        ) as InMemoryCar[];
-        const retrievedCarRentals: InMemoryCarRental[] = _.filter(
-            this.unitOfWork.carRentals,
-            inMemoryCarRental => inMemoryCarRental.modelId === modelId,
-        );
-        const retrievedCar = _.find(
-            retrievedCars,
-            inMemoryCar => !(retrievedCarRentals.find((
-                element) => (element.carId === inMemoryCar.id) && (element.pickupDateTime < dropOffDateTime) && (element.dropOffDateTime > pickupDateTime)
-            ))
-        );
-        if (retrievedCar === undefined) {
-            throw new UnavailableCarError();
-        }
-        const retrievedCarModel = _.find(
-            this.unitOfWork.carModels,
-            inMemoryCarModel => inMemoryCarModel.id === modelId
-        ) as InMemoryCarModel;
+
+        // EXERCISE #3: MISSING CODE HERE
 
         return InMemoryCarReadRepository.toCar({
             inMemoryCar: retrievedCar,

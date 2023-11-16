@@ -32,22 +32,7 @@ export default class RentACar {
 
     async execute(command: RentACarCommand): Promise<CarRentalDTO> {
         await this.transactionManager.startTransaction();
-        const availableCar = await this.carReadRepository.getOneAvailableCar({
-            modelId: command.carModelId,
-            pickupDateTime: command.pickupDateTime,
-            dropOffDateTime: command.dropOffDateTime,
-        });
-        const carRental = new CarRental({
-            id: v4(),
-            car: availableCar,
-            customerId: command.customerId,
-            totalPrice: 0,
-            pickupDateTime: command.pickupDateTime,
-            dropOffDateTime: command.dropOffDateTime,
-        });
-        carRental.computeTotalPrice();
-        const carRentalDTO = carRental.toDTO();
-        await this.carRentalWriteRepository.create(carRentalDTO);
+        // EXERCISE #3: MISSING CODE HERE
         await this.transactionManager.commit();
 
         return carRentalDTO;

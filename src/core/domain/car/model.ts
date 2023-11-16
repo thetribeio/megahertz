@@ -22,18 +22,7 @@ export default class Car {
         this.model = model;
     }
 
-    /**
-     * Computes a price, based on a number of days multiplied by the car model daily rate.
-     *
-     * @param {number} durationInDays The duration of the rental in days.
-     *
-     * @return {number} The computed price.
-     */
-    computePrice(durationInDays: number): number {
-        const {dailyRate} = this.model.toDTO();
-
-        return dailyRate * durationInDays;
-    }
+    // EXERCISE #3: MISSING CODE HERE
 
     /**
      * Returns a car DTO (Data Transfer Object)

@@ -38,16 +38,7 @@ export default class CarRental {
         this.dropOffDateTime = dropOffDateTime;
     }
 
-    /**
-     * Computes the total price for the rental period.
-     */
-    computeTotalPrice() {
-        const duration = intervalToDuration({
-            start: this.pickupDateTime,
-            end: this.dropOffDateTime,
-        });
-        this.totalPrice = this.car.computePrice(duration.days as number);
-    }
+    // EXERCISE #3: MISSING CODE HERE
 
     /**
      * Returns a car rental DTO (Data Transfer Object)
