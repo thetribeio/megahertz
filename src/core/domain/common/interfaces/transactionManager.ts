@@ -9,7 +9,7 @@ export default interface TransactionManagerInterface {
     /**
      * Starts a transaction block, within which change of states will be atomic.
      */
-    startTransaction(): void;
+    startTransaction(): Promise<void>;
 
     /**
      * Creates and returns a new transaction

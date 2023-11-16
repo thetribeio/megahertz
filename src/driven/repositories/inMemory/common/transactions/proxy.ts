@@ -18,7 +18,7 @@ export default class InMemoryTransactionManagerProxy implements TransactionManag
         this.transaction = null;
     }
 
-    startTransaction(): void {
+    async startTransaction(): Promise<void> {
         this.transaction = this.transactionManager.newTransaction();
     }
 

@@ -6,7 +6,7 @@ import {TypeORMCar, TypeORMCarRental, TypeORMCustomer} from 'src/driven/reposito
 
 export default class TypeORMCarRentalFactory extends Factory<TypeORMCarRental> {
     protected entity = TypeORMCarRental;
-    protected dataSource = container.resolve("CommandDataSource") as DataSource;
+    protected dataSource = container.resolve("DataSource") as DataSource;
 
     protected attrs(): FactorizedAttrs<TypeORMCarRental> {
         return {
