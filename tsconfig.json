@@ -1,20 +1,16 @@
 {
-  "extends": "@tsconfig/node20/tsconfig.json",
-  "compilerOptions": {
-    "target": "es6",
-    "lib": ["es6"],
-    "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "rootDir": "src",
-    "outDir": "dist",
-    "baseUrl": ".",
-  },
-  "include": [
-    "src/**/*"
-  ]
+    "extends": "@tsconfig/node20/tsconfig.json",
+    "compilerOptions": {
+        "target": "es6",
+        "lib": ["es6"],
+        "emitDecoratorMetadata": true,
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "outDir": "dist",
+        "baseUrl": "."
+    },
+    "include": ["src/**/*", "tests/**/*"]
 }
