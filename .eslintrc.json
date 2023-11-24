@@ -1,28 +1,29 @@
 {
-  "root": true,
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "project": ["tsconfig.json"]
-  },
-  "env": {
-    "node": true
-  },
-  "overrides": [
-    {
-      "files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
-      "extends": ["@thetribe/eslint-config-typescript", "prettier"],
-      "plugins": ["@typescript-eslint"],
-      "rules": {
-        "import/no-unresolved": 0,
-        "import/prefer-default-export": 0,
-        "import/order": 0,
-        "implicit-arrow-linebreak": 0,
-        "padding-line-between-statements": 0,
-        "function-paren-newline": 0,
-        "eol-last": 0,
-        "import/no-cycle": 0,
-        "no-underscore-dangle": 0
-      }
-    }
-  ]
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": ["tsconfig.json"]
+    },
+    "env": {
+        "node": true,
+        "jest": true
+    },
+    "overrides": [
+        {
+            "files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
+            "extends": ["@thetribe/eslint-config-typescript", "prettier"],
+            "plugins": ["@typescript-eslint"],
+            "rules": {
+                "import/no-unresolved": 0,
+                "import/prefer-default-export": 0,
+                "import/order": 0,
+                "implicit-arrow-linebreak": 0,
+                "padding-line-between-statements": 0,
+                "function-paren-newline": 0,
+                "eol-last": 0,
+                "import/no-cycle": 0,
+                "no-underscore-dangle": 0
+            }
+        }
+    ]
 }
