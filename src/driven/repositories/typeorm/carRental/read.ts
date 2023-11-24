@@ -16,31 +16,11 @@ export default class TypeORMCarRentalReadRepository implements CarRentalReadRepo
     }
 
     private async queryBuilder(): Promise<SelectQueryBuilder<TypeORMCarRental>> {
-        const queryRunner = this.dataSource.createQueryRunner("slave");
-        return this.dataSource
-            .createQueryBuilder(TypeORMCarRental, "car", queryRunner)
-            .setQueryRunner(queryRunner);
+        // EXERCISE #3: MISSING CODE HERE
     }
 
     async read(id: string): Promise<CarRental> {
         const queryBuilder = await this.queryBuilder();
-        const retrievedCarRental = await queryBuilder
-            .setFindOptions({where: {id}, relations: ['customer', 'car', 'car.model']})
-            .getOne() as TypeORMCarRental;
-
-        return new CarRental({
-            id,
-            customerId: retrievedCarRental.customer.id,
-            totalPrice: retrievedCarRental.totalPrice,
-            pickupDateTime: retrievedCarRental.pickupDateTime,
-            dropOffDateTime: retrievedCarRental.dropOffDateTime,
-            car: new Car({
-                id: retrievedCarRental.car.id,
-                model: new CarModel({
-                    id: retrievedCarRental.car.model.id,
-                    dailyRate: retrievedCarRental.car.model.dailyRate,
-                })
-            })
-        })
+        // EXERCISE #3: MISSING CODE HERE
     }
 }

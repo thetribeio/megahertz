@@ -83,7 +83,7 @@ describe.each([
     })
 
     afterEach(async () => {
-        await runDataSourceAfterEachOps();
+        // EXERCISE #3: MISSING CODE HERE
     })
 
     test(`Read a car rental ${testCase.rental.id} should return one car rental`, async () => {
