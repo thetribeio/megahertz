@@ -10,12 +10,7 @@ const router = Router();
  * REST entry point to retrieve a car rental.
  */
 router.get('/:id', [], async (req: Request, res: Response) => {
-    const uc: RetrieveACarRental = new RetrieveACarRental({
-        carRentalReadRepository: container.resolve("CarRentalReadRepositoryInterface"),
-    });
-    const carRentalDTO = await uc.execute({
-        id: req.params.id,
-    });
+    // EXERCISE #5: MISSING CODE HERE
     const presentedCarRental: CarRentalView = new CarRentalPresenter().present({carRentalDTO});
 
     return res.status(200).send(presentedCarRental);

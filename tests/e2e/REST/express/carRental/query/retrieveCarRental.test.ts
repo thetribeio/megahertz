@@ -64,8 +64,7 @@ describe.each([
         useTestingUtilities();
         dateParser = container.resolve("DateParser");
         useAppDataSources();
-        useTypeORMRepositories();
-        expressApp = createApp();
+        // EXERCISE #5: MISSING CODE HERE
         server = startServer(expressApp);
     })
 
@@ -112,15 +111,10 @@ describe.each([
     })
 
     afterAll(async () => {
-        await server.close();
+        // EXERCISE #5: MISSING CODE HERE
     })
 
     it(`should respond with a presented car rental ${testCase.rental.id}`, async () => {
-        await supertest(expressApp)
-            .get(`/api/car-rentals/${testCase.rental.id}`)
-            .expect(200)
-            .then(async (res) => {
-               expect(res.body).toEqual(expectedCarRentalView);
-            });
+        // EXERCISE #5: MISSING CODE HERE
     })
 })

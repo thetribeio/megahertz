@@ -12,20 +12,6 @@ export default class CarRentalPresenter {
      * @param carRentalDTO The car rental DTO to use for mapping.
      */
     present({carRentalDTO}: { carRentalDTO: CarRentalDTO }): CarRentalView {
-        return {
-            id: carRentalDTO.id,
-            customer: {
-                id: carRentalDTO.customerId
-            },
-            car: {
-                id: carRentalDTO.car.id,
-                model: {
-                    id: carRentalDTO.car.model.id
-                }
-            },
-            totalPrice: carRentalDTO.totalPrice,
-            pickupDateTime: carRentalDTO.pickupDateTime.toISOString(),
-            dropOffDateTime: carRentalDTO.dropOffDateTime.toISOString(),
-        }
+        // EXERCISE #5: MISSING CODE HERE
     }
 }
